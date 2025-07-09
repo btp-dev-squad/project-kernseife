@@ -2,7 +2,8 @@
 
 # Project Kernseife
 
-[!IMPORTANT] In case of issues please check-out the [FAQ](https://github.com/SAP/project-kernseife/blob/main/faq.md) first.
+> [!IMPORTANT]
+> In case of issues please check-out the [FAQ](https://github.com/SAP/project-kernseife/blob/main/faq.md) first.
 
 ## About this project
 
