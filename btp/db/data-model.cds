@@ -67,9 +67,6 @@ entity DevelopmentObjects : managed {
         extension             : Association to Extensions
                                     on extension.ID = $self.extension_ID;
 
-        @readonly
-        cleanCoreScore        : Decimal(4, 2);
-
         @Common.ValueListWithFixedValues: true
         @(Common                        : {
             Label    : '{i18n>namespace}',

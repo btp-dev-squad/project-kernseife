@@ -56,27 +56,6 @@ annotate service.DevelopmentObjects with @(UI.LineItem: [
         Value            : score,
         ![@UI.Importance]: #High,
     },
-    {
-        $Type                    : 'UI.DataField',
-        Value                    : cleanCoreScore,
-        Criticality              : {$edmJson: {$If: [
-            {$Lt: [
-                {$Path: 'cleanCoreScore'},
-                1
-            ]},
-            0,
-            {$If: [
-                {$Gt: [
-                    {$Path: 'cleanCoreScore'},
-                    4.99
-                ]},
-                3,
-                2
-            ]}
-        ]}},
-        CriticalityRepresentation: #WithoutIcon,
-
-    },
      {
         $Type : 'UI.DataFieldForAction',
          Action: 'AdminService.EntityContainer/recalculateAllScores',
@@ -107,11 +86,6 @@ annotate service.DevelopmentObjects with @(
                 $Type: 'UI.DataField',
                 Label: '{i18n>languageVersion}',
                 Value: languageVersion_code,
-            },
-            {
-                $Type: 'UI.DataField',
-                Label: '{i18n>cleanCoreScore}',
-                Value: cleanCoreScore,
             },
             {
                 $Type: 'UI.DataField',
@@ -149,7 +123,6 @@ annotate service.DevelopmentObjects with {
     systemId       @Common.Label: '{i18n>systemId}';
     devClass       @Common.Label: '{i18n>devClass}';
     objectType     @Common.Label: '{i18n>objectType}';
-    cleanCoreScore @Common.Label: '{i18n>cleanCoreScore}';
 };
 
 annotate service.DevelopmentObjects with @(UI.SelectionPresentationVariant #table: {

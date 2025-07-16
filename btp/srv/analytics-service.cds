@@ -23,9 +23,6 @@ service AnalyticsService @(requires: [
             findingListAggregated,
             latestScoringImportId,
             namespace,
-            @Analytics.Measure  : true
-            @Aggregation.default: #AVG
-            cleanCoreScore,
             @Analytics.Measure  : true  @Aggregation.default: #SUM
             score,
             @Analytics.Measure  : true  @Aggregation.default: #SUM

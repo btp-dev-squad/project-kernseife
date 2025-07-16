@@ -126,21 +126,6 @@
     "enableLazyRendering": true,
     "considerAnalyticalParameters": false,
     "cards": {
-      "cleanCoreScore": {
-        "model": "mainModel",
-        "template": "sap.ovp.cards.v4.charts.analytical",
-        "settings": {
-          "title": "{{cleanCoreScore}}",
-          "subTitle": "{{cleanCoreScoreSubTitle}}",
-          "entitySet": "DevelopmentObjects",
-          "valueSelectionInfo": "{{cleanCoreScoreValueSelectionInfo}}",
-          "identificationAnnotationPath": "com.sap.vocabularies.UI.v1.Identification#cleanCoreScore",
-          "presentationAnnotationPath": "com.sap.vocabularies.UI.v1.PresentationVariant#cleanCoreScore",
-          "chartAnnotationPath": "com.sap.vocabularies.UI.v1.Chart#cleanCoreScore",
-          "dataPointAnnotationPath": "com.sap.vocabularies.UI.v1.DataPoint#cleanCoreScore",
-          "bEnableStableColors": true
-        }
-      },
       "languageVersionShare": {
         "model": "mainModel",
         "template": "sap.ovp.cards.v4.charts.analytical",

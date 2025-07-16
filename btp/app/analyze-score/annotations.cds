@@ -26,10 +26,6 @@ annotate service.DevelopmentObjects with @(
             {
                 $Type   : 'Aggregation.AggregatablePropertyType',
                 Property: score
-            },
-            {
-                $Type   : 'Aggregation.AggregatablePropertyType',
-                Property: cleanCoreScore
             }
         ]
     },
@@ -39,14 +35,7 @@ annotate service.DevelopmentObjects with @(
         AggregationMethod   : 'sum',
         Name                : 'totalScore',
         ![@Common.Label]    : '{i18n>totalScore}'
-    },
-    Analytics.AggregatedProperty #avgCleanCoreScore: {
-        $Type               : 'Analytics.AggregatedPropertyType',
-        AggregatableProperty: cleanCoreScore,
-        AggregationMethod   : 'average',
-        Name                : 'avgCleanCoreScore',
-        ![@Common.Label]    : '{i18n>avgCleanCoreScore}'
-    },
+    }
 );
 
 
@@ -62,19 +51,12 @@ annotate service.DevelopmentObjects with @(
             Role     : #Category
         }],
         DynamicMeasures    : [
-            ![@Analytics.AggregatedProperty#totalScore],
-            ![@Analytics.AggregatedProperty#avgCleanCoreScore]
+            ![@Analytics.AggregatedProperty#totalScore]
         ],
         MeasureAttributes  : [
             {
                 $Type         : 'UI.ChartMeasureAttributeType',
                 DynamicMeasure: ![@Analytics.AggregatedProperty#totalScore],
-                Role          : #Axis1,
-
-            },
-            {
-                $Type         : 'UI.ChartMeasureAttributeType',
-                DynamicMeasure: ![@Analytics.AggregatedProperty#avgCleanCoreScore],
                 Role          : #Axis1,
 
             }
@@ -261,12 +243,7 @@ annotate service.DevelopmentObjects with @(UI: {
             $Type            : 'UI.DataField',
             Value            : score,
             ![@UI.Importance]: #High,
-        },
-        {
-            $Type            : 'UI.DataField',
-            Value            : cleanCoreScore,
-            ![@UI.Importance]: #High,
-        },
+        }
     ],
 });
 
@@ -285,7 +262,6 @@ annotate service.DevelopmentObjects with {
     extension_ID;
     languageVersion_code @Common.Label: '{i18n>languageVersion}';
     score                @Common.Label: '{i18n>score}';
-    cleanCoreScore       @Common.Label: '{i18n>cleanCoreScore}';
 };
 
 annotate service.ScoringFindingsAggregated with @(

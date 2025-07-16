@@ -37,29 +37,6 @@ export const determineNamespace = (developmentObject) => {
   }
 };
 
-
-export const calculateCleanCoreScore = async (
-  developmentObject
-): Promise<number> => {
-  // Get Latest Scoring Run
-  const averageReleaseScore = await SELECT.from(entities.ScoringRecords)
-    .columns('avg(classification.releaseLevel.score)')
-    .where({
-      import_ID: developmentObject.latestScoringImportId,
-      objectType: developmentObject.objectType,
-      objectName: developmentObject.objectName,
-      devClass: developmentObject.devClass,
-      systemId: developmentObject.systemId
-    });
-  if (
-    !averageReleaseScore ||
-    averageReleaseScore.length !== 1 ||
-    !averageReleaseScore[0].avg
-  )
-    return 0;
-  return averageReleaseScore[0].avg;
-};
-
 export const calculateScoreByRef = async (ref) => {
   // read Development Object
   const developmentObject = await SELECT.one.from(ref);
@@ -84,12 +61,8 @@ export const calculateScoreByRef = async (ref) => {
     return sum + row.score;
   }, 0);
   developmentObject.score = score || 0;
-
-  developmentObject.cleanCoreScore =
-    await calculateCleanCoreScore(developmentObject);
   LOG.info('Development Object Score', {
-    score: developmentObject.score,
-    cleanCoreScore: developmentObject.cleanCoreScore
+    score: developmentObject.score
   });
   // Update Development Object
   await UPSERT.into(entities.DevelopmentObjects).entries([developmentObject]);
@@ -111,24 +84,6 @@ export const calculateScoreByRef = async (ref) => {
   return developmentObject;
 };
 
-const calculateCleanCoreScores = async () => {
-  await db.run(
-    'UPDATE kernseife_db_DEVELOPMENTOBJECTS as d SET cleanCoreScore = (' +
-      'SELECT IFNULL(avg(rl.score),0) AS avgScore ' +
-      'FROM kernseife_db_SCORINGRECORDS as f ' +
-      'INNER JOIN kernseife_db_Classifications as c ON c.objectType = f.refObjectType AND c.objectName = f.refObjectName ' +
-      'INNER JOIN kernseife_db_ReleaseLevel as rl ON rl.code = c.releaseLevel_code ' +
-      'WHERE f.objectType = d.objectType AND f.objectName = d.objectName AND f.devClass = d.devClass AND f.systemId = d.systemId AND d.latestScoringImportId = f.import_ID ' +
-      'GROUP BY f.import_ID, f.objectType, f.objectName, f.devClass, f.systemId)'
-  );
-
-  // Set Score to 0 in case there are no findings
-  await db.run(
-    "UPDATE kernseife_db_DEVELOPMENTOBJECTS as d SET cleanCoreScore = 0 WHERE cleanCoreScore IS NULL AND latestScoringImportId IS NOT NULL AND latestScoringImportId != ''"
-  );
-
-  LOG.info('Score Mass Clean Core Calculation done');
-};
 
 export const calculateNamespaces = async () => {
   if (db.kind != 'sqlite') {
@@ -160,9 +115,6 @@ export const calculateScores = async () => {
   await db.run(
     "UPDATE kernseife_db_DEVELOPMENTOBJECTS as d SET score = 0 WHERE score IS NULL AND latestScoringImportId IS NOT NULL AND latestScoringImportId != ''"
   );
-
-  // Calculate Clean Core Score
-  await calculateCleanCoreScores();
 
   // Calculate Name spaces
   await calculateNamespaces();
@@ -304,11 +256,9 @@ export const importScoring = async (
         } as DevelopmentObject;
 
         developmentObject.score = await calculateScore(developmentObject);
-
         developmentObject.namespace = determineNamespace(developmentObject);
       
-        developmentObject.cleanCoreScore =
-          await calculateCleanCoreScore(developmentObject);
+    
 
         if (
           !developmentObject.devClass ||
@@ -341,8 +291,6 @@ export const importScoring = async (
           developmentObjectDB.score = await calculateScore(developmentObjectDB);
           developmentObjectDB.namespace =
             determineNamespace(developmentObjectDB);
-          developmentObjectDB.cleanCoreScore =
-            await calculateCleanCoreScore(developmentObjectDB);
        
           developmentObjectUpsert.push(developmentObjectDB);
           upsertCount++;
