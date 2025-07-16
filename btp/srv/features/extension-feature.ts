@@ -36,6 +36,7 @@ export const addDevelopmentObjectsByDevClass = async (ref, devClass) => {
 
 export const addDevelopmentObject = async (ref, objectType, objectName, devClass) => {
     // read Extension Object
+    // Add Tests
     const extension = await SELECT.one.from(ref, e => { e.ID, e.system() });
     await UPDATE.entity(entities.DevelopmentObjects)
         .set({

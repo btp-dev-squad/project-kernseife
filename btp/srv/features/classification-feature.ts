@@ -654,7 +654,7 @@ const getEnhancementRatingCode = (
   } else if (releaseState && releaseState.releaseLevel_code == 'DEPRECATED') {
     return 'EF1'; //TODO this doesn't make sense, but.. yeah
   } else if (releaseState && releaseState.releaseLevel_code != 'undefined') {
-    return 'MIG';
+    return 'MIG'; // What do we do with this?
   }
   if (enhancementObject.internalUse) {
     return 'EF9';
