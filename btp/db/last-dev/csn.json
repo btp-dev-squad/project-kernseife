@@ -52,12 +52,6 @@
           "length": 5000,
           "@cds.persistence.name": "EXTENSION_ID"
         },
-        "cleanCoreScore": {
-          "type": "cds.Decimal",
-          "precision": 4,
-          "scale": 2,
-          "@cds.persistence.name": "CLEANCORESCORE"
-        },
         "namespace": {
           "type": "cds.String",
           "length": 5000,
