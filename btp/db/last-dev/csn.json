@@ -52,12 +52,6 @@
           "length": 5000,
           "@cds.persistence.name": "EXTENSION_ID"
         },
-        "cleanCoreLevel_code": {
-          "type": "cds.String",
-          "length": 5000,
-          "@odata.foreignKey4": "cleanCoreLevel",
-          "@cds.persistence.name": "CLEANCORELEVEL_CODE"
-        },
         "cleanCoreScore": {
           "type": "cds.Decimal",
           "precision": 4,
@@ -1051,12 +1045,6 @@
           "length": 36,
           "@odata.foreignKey4": "system",
           "@cds.persistence.name": "SYSTEM_ID"
-        },
-        "cleanCoreLevel_code": {
-          "type": "cds.String",
-          "length": 5000,
-          "@odata.foreignKey4": "cleanCoreLevel",
-          "@cds.persistence.name": "CLEANCORELEVEL_CODE"
         }
       },
       "@cds.persistence.name": "KERNSEIFE_DB_EXTENSIONS"

@@ -67,10 +67,6 @@ entity DevelopmentObjects : managed {
         extension             : Association to Extensions
                                     on extension.ID = $self.extension_ID;
 
-
-        @readonly
-        cleanCoreLevel        : Association to CleanCoreLevel;
-
         @readonly
         cleanCoreScore        : Decimal(4, 2);
 
@@ -705,13 +701,6 @@ entity ReleaseLevel {
 }
 
 @cds.odata.valuelist
-entity CleanCoreLevel {
-    key code        : String;
-        title       : String;
-        criticality : Association to Criticality;
-}
-
-@cds.odata.valuelist
 entity ReleaseLabel {
     key code        : String;
         title       : String;
@@ -839,9 +828,6 @@ entity Extensions : cuid, managed {
 
     @mandatory
     system               : Association to Systems;
-
-    @readonly
-    cleanCoreLevel       : Association to CleanCoreLevel;
 
     developemtObjectList : Association to many DevelopmentObjects
                                on developemtObjectList.extension_ID = $self.ID;

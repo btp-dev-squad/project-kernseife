@@ -75,9 +75,6 @@ service ViewerService @(requires: [
     entity ReleaseLevel                  as projection on db.ReleaseLevel;
 
     @readonly
-    entity CleanCoreLevel                as projection on db.CleanCoreLevel;
-
-    @readonly
     entity LanguageVersions              as projection on db.LanguageVersions;
 
     @readonly

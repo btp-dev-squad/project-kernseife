@@ -20,7 +20,6 @@ annotate service.DevelopmentObjects with @(
             systemId,
             extension,
             languageVersion_code,
-            cleanCoreLevel_code,
             namespace
         ],
         AggregatableProperties: [
@@ -214,44 +213,13 @@ annotate service.DevelopmentObjects with @(
     }
 }
 
-//cleanCoreLevel
-annotate service.DevelopmentObjects with @(
-    UI.Chart #cleanCoreLevel                  : {
-        $Type              : 'UI.ChartDefinitionType',
-        ChartType          : #Bar,
-        Dimensions         : [cleanCoreLevel_code],
-        DimensionAttributes: [{
-            $Type    : 'UI.ChartDimensionAttributeType',
-            Dimension: cleanCoreLevel_code,
-            Role     : #Category
-        }],
-        DynamicMeasures    : [ ![@Analytics.AggregatedProperty#totalScore] ]
-    },
-    UI.PresentationVariant #prevCleanCoreLevel: {
-        $Type         : 'UI.PresentationVariantType',
-        Visualizations: ['@UI.Chart#cleanCoreLevel', ],
-    }
-) {
-    cleanCoreLevel @Common.ValueList #vlCleanCoreLevel: {
-        $Type                       : 'Common.ValueListType',
-        CollectionPath              : 'DevelopmentObjects',
-        Parameters                  : [{
-            $Type            : 'Common.ValueListParameterInOut',
-            ValueListProperty: 'cleanCoreLevel_code',
-            LocalDataProperty: cleanCoreLevel_code
-        }],
-        PresentationVariantQualifier: 'prevCleanCoreLevel'
-    }
-}
-
 annotate service.DevelopmentObjects with @(UI: {
     SelectionFields: [
         devClass,
         systemId,
         extension_ID,
         namespace,
-        objectType,
-        cleanCoreLevel_code,
+        objectType
     ],
     LineItem       : [
         {
@@ -291,12 +259,6 @@ annotate service.DevelopmentObjects with @(UI: {
         },
         {
             $Type            : 'UI.DataField',
-            Value            : cleanCoreLevel.title,
-            Label            : '{i18n>cleanCoreLevel}',
-            ![@UI.Importance]: #Medium,
-        },
-        {
-            $Type            : 'UI.DataField',
             Value            : score,
             ![@UI.Importance]: #High,
         },
@@ -314,13 +276,6 @@ annotate service.DevelopmentObjects with {
     objectType           @Common.Label: '{i18n>objectType}';
     systemId             @Common.Label: '{i18n>systemId}';
     extension            @Common.Label: '{i18n>extension}';
-    @Common.Label: '{i18n>cleanCoreLevel}'
-    @UI.HiddenFilter
-    @Common.Text : {
-        $value                : cleanCoreLevel.title,
-        ![@UI.TextArrangement]: #TextOnly,
-    }
-    cleanCoreLevel;
     @Common.Label: '{i18n>extension}'
     @UI.HiddenFilter
     @Common.Text : {
@@ -450,10 +405,6 @@ annotate service.DevelopmentObjects with @(
             },
             {
                 $Type: 'UI.DataField',
-                Value: cleanCoreLevel.title,
-            },
-            {
-                $Type: 'UI.DataField',
                 Value: score,
             }
         ],
@@ -473,7 +424,3 @@ annotate service.DevelopmentObjects with @(
         },
     ]
 );
-
-annotate service.CleanCoreLevel with {
-    code @Common.Label: 'cleanCoreLevel/code'
-};

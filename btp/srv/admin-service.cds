@@ -21,8 +21,7 @@ service AdminService @(requires: 'admin') {
                                                 latestScoringImportId != ''
         actions {
             @(Common.SideEffects: {TargetEntities: [
-                '/AdminService.EntityContainer/DevelopmentObjects/findingListAggregated',
-                'in/cleanCoreLevel',
+                '/AdminService.EntityContainer/DevelopmentObjects/findingListAggregated'
             ], })
             action recalculateScore() returns DevelopmentObjects;
         }
@@ -82,7 +81,6 @@ service AdminService @(requires: 'admin') {
     entity ClassicInfo                   as projection on db.ClassicInfo;
     entity ReleaseLabel                  as projection on db.ReleaseLabel;
     entity ReleaseLevel                  as projection on db.ReleaseLevel;
-    entity CleanCoreLevel                as projection on db.CleanCoreLevel;
     entity LanguageVersions              as projection on db.LanguageVersions;
     entity Notes                         as projection on db.Notes;
     entity NoteClassifications           as projection on db.NoteClassifications;

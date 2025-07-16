@@ -191,11 +191,6 @@
                       "visualFilter": {
                         "valueList": "com.sap.vocabularies.Common.v1.ValueList#vlLanguageVersion"
                       }
-                    },
-                    "cleanCoreLevel_code": {
-                      "visualFilter": {
-                        "valueList": "com.sap.vocabularies.Common.v1.ValueList#vlCleanCoreLevel"
-                      }
                     }
                   }
                 }

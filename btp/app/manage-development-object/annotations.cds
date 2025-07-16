@@ -77,11 +77,6 @@ annotate service.DevelopmentObjects with @(UI.LineItem: [
         CriticalityRepresentation: #WithoutIcon,
 
     },
-    {
-        $Type: 'UI.DataField',
-        Label: '{i18n>cleanCoreLevel}',
-        Value: cleanCoreLevel.title,
-    },
      {
         $Type : 'UI.DataFieldForAction',
          Action: 'AdminService.EntityContainer/recalculateAllScores',
@@ -112,12 +107,6 @@ annotate service.DevelopmentObjects with @(
                 $Type: 'UI.DataField',
                 Label: '{i18n>languageVersion}',
                 Value: languageVersion_code,
-            },
-
-            {
-                $Type: 'UI.DataField',
-                Label: '{i18n>cleanCoreLevel}',
-                Value: cleanCoreLevel.title,
             },
             {
                 $Type: 'UI.DataField',
@@ -152,8 +141,7 @@ annotate service.DevelopmentObjects with @(UI.SelectionFields: [
     devClass,
     namespace,
     objectType,
-    languageVersion_code,
-    cleanCoreLevel_code
+    languageVersion_code
 ]);
 
 annotate service.DevelopmentObjects with {
@@ -162,7 +150,6 @@ annotate service.DevelopmentObjects with {
     devClass       @Common.Label: '{i18n>devClass}';
     objectType     @Common.Label: '{i18n>objectType}';
     cleanCoreScore @Common.Label: '{i18n>cleanCoreScore}';
-    cleanCoreLevel @Common.Label: '{i18n>cleanCoreLevel}';
 };
 
 annotate service.DevelopmentObjects with @(UI.SelectionPresentationVariant #table: {

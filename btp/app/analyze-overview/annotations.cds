@@ -1,47 +1,5 @@
 using AnalyticsService as service from '../../srv/analytics-service';
 
-
-annotate service.DevelopmentObjects with @(
-    UI.Chart #cleanCoreShare              : {
-        $Type              : 'UI.ChartDefinitionType',
-        Title              : '{i18n>cleanCoreShare}',
-        ChartType          : #Donut,
-        Dimensions         : [cleanCoreLevel_code],
-        DimensionAttributes: [{
-            $Type    : 'UI.ChartDimensionAttributeType',
-            Dimension: cleanCoreLevel_code,
-            Role     : #Category
-        }],
-        Measures           : [objectCount],
-        MeasureAttributes  : [{
-            $Type  : 'UI.ChartMeasureAttributeType',
-            Measure: objectCount,
-            Role   : #Axis1,
-        }]
-    },
-    UI.PresentationVariant #cleanCoreShare: {
-
-        MaxItems      : 5,
-        SortOrder     : [{
-            $Type     : 'Common.SortOrderType',
-            Property  : cleanCoreLevel_code,
-            Descending: true
-        }],
-        Visualizations: ['@UI.Chart#cleanCoreShare']
-    },
-    UI.DataPoint #cleanCoreShare          : {
-        $Type: 'UI.DataPointType',
-        Value: objectCount,
-        Title: '{i18n>cleanCoreShare}',
-    },
-
-    UI.Identification #cleanCoreShare     : [{
-        $Type         : 'UI.DataFieldForIntentBasedNavigation',
-        SemanticObject: 'DevelopmentObjects',
-        Action        : 'manage',
-    }, ]
-);
-
 annotate service.DevelopmentObjects with @(
     UI.Chart #cleanCoreScore              : {
         $Type              : 'UI.ChartDefinitionType',

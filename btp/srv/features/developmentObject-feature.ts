@@ -9,92 +9,6 @@ import papa from 'papaparse';
 
 const LOG = log('DevelopmentObjectFeature');
 
-export const determineCleanCoreLevel = async (
-  developmentObject
-): Promise<string> => {
-  //LOG.info("determineCleanCoreLevel", { developmentObject });
-
-  const result = await SELECT.from(entities.ScoringRecords)
-    .columns(
-      `releaseState.releaseLevel_code as releaseLevel`,
-      `count(*) as count`
-    )
-    .where({
-      import_ID: developmentObject.latestScoringImportId,
-      objectType: developmentObject.objectType,
-      objectName: developmentObject.objectName,
-      devClass: developmentObject.devClass,
-      systemId: developmentObject.systemId
-    })
-    .groupBy('releaseState.releaseLevel_code');
-
-  if (!result || result.length === 0) {
-    // Determine base Level without findings
-    if (developmentObject.languageVersion_code === '5') return 'A';
-    if (developmentObject.languageVersion_code === '2') return 'B';
-    return 'C'; // May be B?
-  }
-
-  const totalFindings = result.reduce((sum, row) => {
-    return sum + row.count;
-  }, 0);
-
-  // Number of Objects used per Release Level
-  // Create a Map with the number of objects per release level
-  const releaseLevelMap = new Map();
-  // define map initial values
-  releaseLevelMap.set('RELEASED', 0);
-  releaseLevelMap.set('DEPRECATED', 0);
-  releaseLevelMap.set('NOT_TO_BE_RELEASED', 0);
-  releaseLevelMap.set('STABLE', 0);
-  releaseLevelMap.set('CLASSIC', 0);
-  releaseLevelMap.set('INTERNAL', 0);
-  releaseLevelMap.set('NO_API', 0);
-  releaseLevelMap.set('CONFLICT', 0);
-
-  result.forEach((finding) => {
-    const count = releaseLevelMap.get(finding.releaseLevel) || 0;
-    releaseLevelMap.set(finding.releaseLevel, count + 1);
-  });
-
-  // Level A => only released objects
-  if (releaseLevelMap.get('RELEASED') === totalFindings) {
-    //TODO also check language Version?
-    return 'A';
-  }
-
-  // Level B => only RELEASED and Classic objects
-  if (
-    releaseLevelMap.get('RELEASED') +
-      releaseLevelMap.get('CLASSIC') +
-      releaseLevelMap.get('STABLE') ===
-    totalFindings
-  ) {
-    return 'B';
-  }
-
-  // Level C => only Released, Classic and Tier3 objects
-  if (
-    releaseLevelMap.get('RELEASED') +
-      releaseLevelMap.get('CLASSIC') +
-      releaseLevelMap.get('STABLE') +
-      releaseLevelMap.get('INTERNAL') ===
-    totalFindings
-  ) {
-    return 'C';
-  }
-
-  // Level C => no "not to be used objects"
-  if (
-    releaseLevelMap.get('NOT_TO_BE_RELEASED') === 0 &&
-    releaseLevelMap.get('NO_API') === 0
-  ) {
-    return 'C';
-  }
-
-  // Baseline Level D
-  return 'D';
-};
 
 export const getDevelopmentObjectCount = async () => {
   const result = await SELECT.from(entities.DevelopmentObjects).columns(
@@ -103,14 +17,6 @@ export const getDevelopmentObjectCount = async () => {
   return result[0]['count'];
 };
 
-export const getDevelopmentObjectColumnsForCleanCoreLevel = (d) => {
-  d.latestScoringImportId,
-    d.objectType,
-    d.objectName,
-    d.systemId,
-    d.devClass,
-    d.languageVersion_code;
-};
 
 export const getTotalScore = async () => {
   const result = await SELECT.from(entities.DevelopmentObjects).columns(
@@ -131,19 +37,6 @@ export const determineNamespace = (developmentObject) => {
   }
 };
 
-export const determineCleanCoreLevelByRef = async (ref) => {
-  // read Development Object
-  const developmentObject = await SELECT.one.from(ref);
-  const cleanCoreLevel = await determineCleanCoreLevel(developmentObject);
-  if (developmentObject.cleanCoreLevel_code !== cleanCoreLevel) {
-    await await UPDATE.entity(
-      entities.DevelopmentObjects,
-      developmentObject.ID
-    ).set({
-      cleanCoreLevel_code: cleanCoreLevel
-    });
-  }
-};
 
 export const calculateCleanCoreScore = async (
   developmentObject
@@ -191,13 +84,11 @@ export const calculateScoreByRef = async (ref) => {
     return sum + row.score;
   }, 0);
   developmentObject.score = score || 0;
-  developmentObject.cleanCoreLevel_code =
-    await determineCleanCoreLevel(developmentObject);
+
   developmentObject.cleanCoreScore =
     await calculateCleanCoreScore(developmentObject);
   LOG.info('Development Object Score', {
     score: developmentObject.score,
-    cleanCoreLevel: developmentObject.cleanCoreLevel_code,
     cleanCoreScore: developmentObject.cleanCoreScore
   });
   // Update Development Object
@@ -415,8 +306,7 @@ export const importScoring = async (
         developmentObject.score = await calculateScore(developmentObject);
 
         developmentObject.namespace = determineNamespace(developmentObject);
-        developmentObject.cleanCoreLevel_code =
-          await determineCleanCoreLevel(developmentObject);
+      
         developmentObject.cleanCoreScore =
           await calculateCleanCoreScore(developmentObject);
 
@@ -453,9 +343,7 @@ export const importScoring = async (
             determineNamespace(developmentObjectDB);
           developmentObjectDB.cleanCoreScore =
             await calculateCleanCoreScore(developmentObjectDB);
-          developmentObjectDB.cleanCoreLevel_code =
-            await determineCleanCoreLevel(developmentObjectDB);
-
+       
           developmentObjectUpsert.push(developmentObjectDB);
           upsertCount++;
         } else {
@@ -494,51 +382,4 @@ export const importScoringById = async (
     })
     .where({ ID: scoringImportId });
   await importScoring(scoringRunImport, tx, updateProgress);
-};
-
-export const determineCleanCoreLevelAll = async (
-  tx: Transaction,
-  updateProgress: (progress: number) => Promise<void>
-) => {
-  const developmentObjects = await SELECT.from(
-    entities.DevelopmentObjects
-  ).columns(getDevelopmentObjectColumnsForCleanCoreLevel);
-
-  let progressCount = 0;
-  const chunkSize = 50;
-  for (let i = 0; i < developmentObjects.length; i += chunkSize) {
-    LOG.info(
-      `Processing ${i}/${developmentObjects.length}`
-    );
-    const chunk = developmentObjects.slice(i, i + chunkSize);
-
-    const updatePromises = [] as any[];
-    for (const developmentObject of chunk) {
-      progressCount++;
-      const cleanCoreLevel = await determineCleanCoreLevel(developmentObject);
-      LOG.info('Clean Core Level', { cleanCoreLevel, developmentObject });
-      if (developmentObject.cleanCoreLevel_code !== cleanCoreLevel) {
-        updatePromises.push(
-          UPDATE.entity(entities.DevelopmentObjects)
-            .set({ cleanCoreLevel_code: cleanCoreLevel })
-            .where({
-              objectType: developmentObject.objectType,
-              objectName: developmentObject.objectName,
-              devClass: developmentObject.devClass,
-              systemId: developmentObject.systemId
-            })
-        );
-      }
-    }
-    await Promise.all(updatePromises);
-    if (updatePromises.length > 0 && tx) {
-      await tx.commit();
-    }
-    if (updateProgress)
-      await updateProgress(
-        Math.round((100 / developmentObjects.length) * progressCount)
-      );
-
-    LOG.info(`Updated ${updatePromises.length} Development Objects`);
-  }
 };

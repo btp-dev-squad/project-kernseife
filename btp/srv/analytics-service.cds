@@ -22,7 +22,6 @@ service AnalyticsService @(requires: [
             languageVersion_code,
             findingListAggregated,
             latestScoringImportId,
-            cleanCoreLevel,
             namespace,
             @Analytics.Measure  : true
             @Aggregation.default: #AVG
@@ -59,9 +58,6 @@ service AnalyticsService @(requires: [
 
     @readonly
     entity ReleaseLevel                  as projection on db.ReleaseLevel;
-
-    @readonly
-    entity CleanCoreLevel                as projection on db.CleanCoreLevel;
 
     @readonly
     entity ReleaseStates                 as projection on db.ReleaseStates;

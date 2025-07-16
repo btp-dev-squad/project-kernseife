@@ -12,10 +12,6 @@ annotate service.Extensions with @(
             },
             {
                 $Type: 'UI.DataField',
-                Value: cleanCoreLevel_code,
-            },
-            {
-                $Type: 'UI.DataField',
                 Value: system_ID,
             },
         ],
@@ -38,10 +34,6 @@ annotate service.Extensions with @(
         {
             $Type: 'UI.DataField',
             Value: title,
-        },
-        {
-            $Type: 'UI.DataField',
-            Value: cleanCoreLevel_code,
         },
         {
             $Type: 'UI.DataField',
@@ -118,7 +110,6 @@ annotate service.Extensions with {
 
 annotate service.Extensions with {
     title          @Common.Label: '{i18n>title}';
-    cleanCoreLevel @Common.Label: '{i18n>cleanCoreLevel}';
     system         @Common.Label: '{i18n>system}';
 };
 
@@ -144,13 +135,6 @@ annotate service.DevelopmentObjects with @(UI.LineItem #developmentObjectList: [
         Value            : objectName,
         ![@UI.Importance]: #High,
     },
-
-    {
-        $Type            : 'UI.DataField',
-        Value            : cleanCoreLevel_code,
-        ![@UI.Importance]: #Medium,
-    },
-
     {
         $Type            : 'UI.DataField',
         Value            : score,
