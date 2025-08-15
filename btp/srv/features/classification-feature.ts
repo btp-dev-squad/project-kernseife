@@ -12,7 +12,7 @@ import {
   ClassificationKey,
   ClassificationImportLog,
   EnhancementImport,
-  ExpicitImport
+  ExplicitImport
 } from '../types/imports';
 import JSZip from 'jszip';
 import { JobResult } from '../types/file';
@@ -238,6 +238,8 @@ const determineRatingPrefix = (
   classification: Classification,
   suffix: string
 ) => {
+  if (classification.subType == 'ENHS') return 'EF' + suffix;
+
   if (
     classification.applicationComponent == 'BC' ||
     classification.applicationComponent?.startsWith('BC-') ||
@@ -251,7 +253,7 @@ const determineRatingPrefix = (
   }
 };
 
-const getDefaultRatingCode = (classification: Classification) => {
+const getRatingforBusinessAndFrameworks = (classification: Classification) => {
   switch (classification.releaseLevel_code) {
     case 'RELEASED':
       return determineRatingPrefix(classification, '0');
@@ -266,7 +268,42 @@ const getDefaultRatingCode = (classification: Classification) => {
     case 'NO_API':
       return determineRatingPrefix(classification, '9');
     default:
-      return NO_CLASS;
+      return determineRatingPrefix(classification, '5');
+  }
+};
+
+const getDefaultRatingCode = (classification: Classification) => {
+  // Released Objects should always be rated as FW0 or BF0
+  if (classification.releaseLevel_code == 'RELEASED')
+    return determineRatingPrefix(classification, '0');
+
+  // Simple cases are mapped per objectType
+  switch (classification.objectType) {
+    case 'DTEL':
+    case 'DOMA':
+      return 'DDS';
+    case 'TTYP':
+    case 'INTTAB':
+    case 'APPEND':
+      return 'DDC';
+    case 'MSAG':
+      return 'MSG';
+    case 'VIEW':
+    case 'TRANSP':
+      return 'TBL';
+    case 'TYPE':
+    case 'ACID':
+      return determineRatingPrefix(classification, '3');
+    case 'CLAS':
+      if (
+        classification.objectName?.startsWith('CX_') ||
+        classification.objectName?.match(/\/.{2,6}\/CX_.*$/)
+      ) {
+        return determineRatingPrefix(classification, '3');
+      }
+      return getRatingforBusinessAndFrameworks(classification);
+    default:
+      return getRatingforBusinessAndFrameworks(classification);
   }
 };
 
@@ -505,7 +542,6 @@ export const importMissingClassifications = async (
         classification.noteList = [];
 
         // Update Total Score
-        //LOG.info("Update Total Score", classification);
         await updateTotalScoreAndReferenceCount(classification);
 
         // Set default rating code
@@ -624,6 +660,9 @@ const getCommentForEnhancementObjectType = (
   enhancementObject: EnhancementImport
 ): string => {
   if (enhancementObject.objectType == 'ENHS') {
+    if (enhancementObject.internalUse) {
+      return 'SAP Internal Enhancement Spot';
+    }
     return 'Enhancement Spot';
   } else if (enhancementObject.objectType == 'SXSD') {
     return 'Classic BADI Definition';
@@ -837,7 +876,7 @@ export const importEnhancementObjects = async (
 };
 
 const getCommentForExplicitObjectType = (
-  explicitObject: ExpicitImport
+  explicitObject: ExplicitImport
 ): string => {
   if (explicitObject.internalUse) {
     return 'SAP Internal Explicit Enhancement Spot';
@@ -873,7 +912,7 @@ export const importExplicitObjects = async (
     skipEmptyLines: true
   });
 
-  const explicitObjectList = result.data as ExpicitImport[];
+  const explicitObjectList = result.data as ExplicitImport[];
 
   // Get all releaseState
   const releaseStateMap = await getReleaseStateMap();

@@ -44,7 +44,7 @@ export type EnhancementImport =  ClassificationKey & {
   singleUse: boolean;
 };
 
-export type ExpicitImport =  ClassificationKey & {
+export type ExplicitImport =  ClassificationKey & {
   applicationComponent: string;
   softwareComponent: string;
   internalUse: boolean;
