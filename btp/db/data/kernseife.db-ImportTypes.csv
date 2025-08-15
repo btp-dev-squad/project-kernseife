@@ -1,3 +1,6 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:1ad197723c48b67cd766d50f2db1c72a98d165a83544df0e6e21bf3a17f6c010
-size 365
+code,title,reqSystemId,defaultRating,comment,fileEndings
+MISSING_CLASSIFICATION,"Missing Classification Import",false,true,true,csv
+SCORING,"Scoring Import",true,false,false,csv
+ENHANCEMENT,"BADI Import",false,false,false,csv
+EXPLICIT,"Explicit Enhancement Spot Import",false,false,false,csv
+GITHUB_CLASSIFICATION,"Github Classification Import",false,false,true,zip

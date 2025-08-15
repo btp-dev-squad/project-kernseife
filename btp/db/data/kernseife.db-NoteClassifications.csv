@@ -1,3 +1,4 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:c20e2d3e939c4fe120681687d6c58b69d453fc3535710174df74eec043007a09
-size 124
+code,title,criticality_code
+"SIMPLIFICATION_DB","Simplification Item",W
+"CONSULTING", "Consulting Note",S
+"OTHER", "Other",I
