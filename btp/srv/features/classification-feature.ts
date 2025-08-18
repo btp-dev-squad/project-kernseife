@@ -278,7 +278,7 @@ const getDefaultRatingCode = (classification: Classification) => {
     return determineRatingPrefix(classification, '0');
 
   // Simple cases are mapped per objectType
-  switch (classification.objectType) {
+  switch (classification.subType) {
     case 'DTEL':
     case 'DOMA':
       return 'DDS';
