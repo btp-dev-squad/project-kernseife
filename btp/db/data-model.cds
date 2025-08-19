@@ -80,6 +80,7 @@ entity DevelopmentObjects : managed {
             }
         })
         namespace             : String;
+        softwareComponent     : String;
         languageVersion       : Association to LanguageVersions
                                     on languageVersion.code = $self.languageVersion_code;
 
@@ -102,37 +103,37 @@ entity DevelopmentObjects : managed {
             }
         })
         languageVersion_code  : String;
-        latestScoringImportId : String;
-        findingList           : Association to many ScoringRecords
+        latestFindingImportId : String;
+        findingList           : Association to many FindingRecords
                                     on  findingList.objectType = $self.objectType
                                     and findingList.objectName = $self.objectName
                                     and findingList.devClass   = $self.devClass
                                     and findingList.systemId   = $self.systemId
-                                    and findingList.import.ID  = $self.latestScoringImportId;
+                                    and findingList.import.ID  = $self.latestFindingImportId;
 
-        findingListAggregated : Association to many ScoringFindingsAggregated
+        findingListAggregated : Association to many FindingsAggregated
                                     on  findingListAggregated.objectType = $self.objectType
                                     and findingListAggregated.objectName = $self.objectName
                                     and findingListAggregated.devClass   = $self.devClass
                                     and findingListAggregated.systemId   = $self.systemId
-                                    and findingListAggregated.importId   = $self.latestScoringImportId;
+                                    and findingListAggregated.importId   = $self.latestFindingImportId;
 
 
         score                 : Integer;
-
+        level                 : CleanCoreLevel;
 
 }
 
-entity ScoringFindingsAggregated    as
-    select from db.ScoringRecords as s
+entity FindingsAggregated           as
+    select from db.FindingRecords as s
     inner join Ratings as r
-        on s.rating_code = r.code
+        on s.messageId = r.code
     inner join db.DevelopmentObjects as d
         on  s.objectType = d.objectType
         and s.objectName = d.objectName
         and s.devClass   = d.devClass
         and s.systemId   = d.systemId
-        and s.import.ID  = d.latestScoringImportId
+        and s.import.ID  = d.latestFindingImportId
     {
         key s.import.ID          as importId,
         key s.objectType,
@@ -141,23 +142,22 @@ entity ScoringFindingsAggregated    as
         key s.systemId,
         key s.refObjectName,
         key s.refObjectType,
-            s.rating_code        as code,
+            s.messageId          as code,
             r.score              as score,
+            r.level              as level,
             r.criticality        as criticality,
             count( * )           as count           : Integer,
             count( * ) * r.score as total           : Integer,
             @Measures.Unit: '%'
-            case d.score
-                when
-                    0
-                then
-                    0
-                else
-                    round(
-                        (
-                            100.0 / d.score
-                        ) * count( * ) * r.score, 2
-                    )
+            case
+                d.score
+                when 0
+                     then 0
+                else round(
+                         (
+                             100.0 / d.score
+                         ) * count( * ) * r.score, 2
+                     )
             end                  as totalPercentage : Decimal(5, 2)
     }
     group by
@@ -168,8 +168,9 @@ entity ScoringFindingsAggregated    as
         s.systemId,
         s.refObjectName,
         s.refObjectType,
-        s.rating_code,
+        s.messageId,
         r.score,
+        r.level,
         d.score,
         r.criticality;
 
@@ -478,7 +479,7 @@ entity Imports : cuid, managed {
 }
 
 @cds.persistence.journal
-entity ScoringRecords {
+entity FindingRecords {
     key import            : Association to Imports;
     key itemId            : String;
         objectType        : String;
@@ -486,7 +487,11 @@ entity ScoringRecords {
         refObjectType     : String;
         refObjectName     : String;
         devClass          : String;
+        softwareComponent : String;
         systemId          : String;
+        messageId         : String;
+        rating            : Association to Ratings
+                                on rating.code = $self.messageId;
         releaseState      : Association to ReleaseStates
                                 on  releaseState.objectType = $self.refObjectType
                                 and releaseState.objectName = $self.refObjectName;
@@ -497,9 +502,8 @@ entity ScoringRecords {
         classification    : Association to Classifications
                                 on  classification.objectType = $self.refObjectType
                                 and classification.objectName = $self.refObjectName;
-        rating            : Association to Ratings
-                                on rating.code = $self.rating_code;
-        rating_code       : String;
+
+
 }
 
 @cds.persistence.journal
@@ -559,15 +563,19 @@ define view AdoptionEffortValueList as
 
 @cds.persistence.journal
 entity Ratings : cuid, managed {
-    @mandatory code        : String(3);
+    @mandatory code        : String(20);
     @mandatory title       : String;
     @mandatory score       : Integer;
+    @mandatory level       : CleanCoreLevel;
+    usableInClassification : Boolean;
 
     @Common.ValueListWithFixedValues: true
     @mandatory criticality : Association to Criticality;
 
     legacyRatingList       : Composition of many LegacyRatings
                                  on legacyRatingList.rating = $self;
+
+
 }
 
 @cds.persistence.journal
@@ -720,39 +728,37 @@ entity AdoptionEffort {
         criticality : Association to Criticality;
 }
 
-            @cds.persistence.journal
+@cds.persistence.journal
 entity DevelopmentObjectsAggregated as
-    select from db.ScoringRecords as s
+    select from db.FindingRecords as s
     inner join Ratings as r
-        on s.rating_code = r.code
+        on s.messageId = r.code
     inner join db.DevelopmentObjects as d
         on  s.objectType = d.objectType
         and s.objectName = d.objectName
         and s.devClass   = d.devClass
         and s.systemId   = d.systemId
-        and s.import.ID  = d.latestScoringImportId
+        and s.import.ID  = d.latestFindingImportId
     {
         key s.refObjectName,
         key s.refObjectType,
         key s.objectName,
         key s.objectType,
-            s.rating_code        as code,
+            s.messageId          as code,
             r.score              as score,
             r.criticality        as criticality,
             count( * )           as count           : Integer,
             count( * ) * r.score as total           : Integer,
             @Measures.Unit: '%'
-            case d.score
-                when
-                    0
-                then
-                    0
-                else
-                    round(
-                        (
-                            100.0 / d.score
-                        ) * count( * ) * r.score, 2
-                    )
+            case
+                d.score
+                when 0
+                     then 0
+                else round(
+                         (
+                             100.0 / d.score
+                         ) * count( * ) * r.score, 2
+                     )
             end                  as totalPercentage : Decimal(5, 2)
     }
     group by
@@ -760,7 +766,7 @@ entity DevelopmentObjectsAggregated as
         s.refObjectType,
         s.objectName,
         s.objectType,
-        s.rating_code,
+        s.messageId,
         r.score,
         d.score,
         r.criticality;
@@ -854,7 +860,7 @@ entity Jobs : cuid, managed {
 }
 
 @assert.range
-type JobStatus : String enum {
+type JobStatus      : String enum {
     NEW;
     RUNNING;
     ERROR;
@@ -862,14 +868,22 @@ type JobStatus : String enum {
 }
 
 @assert.range
-type JobType   : String enum {
-    IMPORT_SCORING = 'IMPORT_SCORING';
+type JobType        : String enum {
+    IMPORT_FINDINGS = 'IMPORT_FINDINGS';
     IMPORT_MISSING_CLASSIFICATION = 'IMPORT_MISSING_CLASSIFICATION';
     EXPORT_MISSING_CLASSIFICATION = 'EXPORT_MISSING_CLASSIFICATION';
     IMPORT_GITHUB_CLASSIFICATION = 'IMPORT_GITHUB_CLASSIFICATION';
     IMPORT_RELEASE_STATE = 'IMPORT_RELEASE_STATE';
     IMPORT_ENHANCEMENT = 'IMPORT_ENHANCEMENT';
     IMPORT_EXPLICIT = 'IMPORT_EXPLICIT';
+}
+
+
+type CleanCoreLevel : String enum {
+    A;
+    B;
+    C;
+    D;
 }
 
 @cds.odata.valuelist

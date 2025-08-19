@@ -51,7 +51,7 @@ export const uploadFile = async (
   }
   let fileType = 'text/csv'; // Default file type
   switch (importType) {
-    case 'SCORING':
+    case 'FINDINGS':
       if (!systemId) {
         throw new Error('No SystemId provided');
       }

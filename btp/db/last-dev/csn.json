@@ -57,19 +57,29 @@
           "length": 5000,
           "@cds.persistence.name": "NAMESPACE"
         },
+        "softwareComponent": {
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "SOFTWARECOMPONENT"
+        },
         "languageVersion_code": {
           "type": "cds.String",
           "length": 5000,
           "@cds.persistence.name": "LANGUAGEVERSION_CODE"
         },
-        "latestScoringImportId": {
+        "latestFindingImportId": {
           "type": "cds.String",
           "length": 5000,
-          "@cds.persistence.name": "LATESTSCORINGIMPORTID"
+          "@cds.persistence.name": "LATESTFINDINGIMPORTID"
         },
         "score": {
           "type": "cds.Integer",
           "@cds.persistence.name": "SCORE"
+        },
+        "level": {
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "LEVEL"
         }
       },
       "@cds.persistence.name": "KERNSEIFE_DB_DEVELOPMENTOBJECTS"
@@ -285,7 +295,7 @@
         },
         "rating_code": {
           "type": "cds.String",
-          "length": 3,
+          "length": 20,
           "@cds.persistence.name": "RATING_CODE"
         },
         "totalScore": {
@@ -531,7 +541,7 @@
       },
       "@cds.persistence.name": "KERNSEIFE_DB_IMPORTS"
     },
-    "kernseife.db.ScoringRecords": {
+    "kernseife.db.FindingRecords": {
       "kind": "entity",
       "@cds.persistence.journal": true,
       "elements": {
@@ -573,18 +583,23 @@
           "length": 5000,
           "@cds.persistence.name": "DEVCLASS"
         },
+        "softwareComponent": {
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "SOFTWARECOMPONENT"
+        },
         "systemId": {
           "type": "cds.String",
           "length": 5000,
           "@cds.persistence.name": "SYSTEMID"
         },
-        "rating_code": {
+        "messageId": {
           "type": "cds.String",
           "length": 5000,
-          "@cds.persistence.name": "RATING_CODE"
+          "@cds.persistence.name": "MESSAGEID"
         }
       },
-      "@cds.persistence.name": "KERNSEIFE_DB_SCORINGRECORDS"
+      "@cds.persistence.name": "KERNSEIFE_DB_FINDINGRECORDS"
     },
     "kernseife.db.SimplificationItems": {
       "kind": "entity",
@@ -679,7 +694,7 @@
         },
         "code": {
           "type": "cds.String",
-          "length": 3,
+          "length": 20,
           "@cds.persistence.name": "CODE"
         },
         "title": {
@@ -690,6 +705,15 @@
         "score": {
           "type": "cds.Integer",
           "@cds.persistence.name": "SCORE"
+        },
+        "level": {
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "LEVEL"
+        },
+        "usableInClassification": {
+          "type": "cds.Boolean",
+          "@cds.persistence.name": "USABLEINCLASSIFICATION"
         },
         "criticality_code": {
           "type": "cds.String",

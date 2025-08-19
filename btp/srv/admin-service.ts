@@ -18,7 +18,7 @@ import {
 import {
   calculateScores,
   calculateScoreByRef,
-  importScoringById
+  importFindingsById
 } from './features/developmentObject-feature';
 import {
   addAllUnassignedDevelopmentObjects,
@@ -223,8 +223,8 @@ export default (srv: Service) => {
               tx,
               updateProgress
             );
-          case 'SCORING':
-            return await importScoringById(ID, tx, updateProgress);
+          case 'FINDINGS':
+            return await importFindingsById(ID, tx, updateProgress);
           case 'ENHANCEMENT':
             return await importEnhancementObjectsById(ID, tx, updateProgress);
           case 'EXPLICIT':
