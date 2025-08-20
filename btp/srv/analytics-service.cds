@@ -25,6 +25,7 @@ service AnalyticsService @(requires: [
             namespace,
             @Analytics.Measure: true  @Aggregation.default: #SUM
             score,
+            level,
             @Analytics.Measure: true  @Aggregation.default: #SUM
             1 as objectCount : Integer
         }

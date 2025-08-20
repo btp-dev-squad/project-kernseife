@@ -39,3 +39,48 @@ annotate service.DevelopmentObjects with @(
         Action        : 'manage',
     }, ]
 );
+
+annotate service.DevelopmentObjects with @(
+
+
+    UI.Chart #levelShare              : {
+        $Type              : 'UI.ChartDefinitionType',
+        Title              : '{i18n>levelShare}',
+        ChartType          : #Donut,
+        Dimensions         : [level],
+
+        DimensionAttributes: [{
+            $Type    : 'UI.ChartDimensionAttributeType',
+            Dimension: level,
+            Role     : #Category
+        }],
+        Measures           : [objectCount],
+        MeasureAttributes  : [{
+            $Type  : 'UI.ChartMeasureAttributeType',
+            Measure: objectCount,
+            Role   : #Axis1
+        }]
+    },
+    UI.PresentationVariant #levelShare: {
+        MaxItems      : 3,
+        SortOrder     : [{
+            $Type     : 'Common.SortOrderType',
+            Property  : level,
+            Descending: false,
+
+        }],
+        Visualizations: ['@UI.Chart#levelShare']
+    },
+    UI.DataPoint #levelShare          : {
+        $Type: 'UI.DataPointType',
+        Value: objectCount,
+        Title: '{i18n>levelShare }',
+
+    },
+
+    UI.Identification #levelShare     : [{
+        $Type         : 'UI.DataFieldForIntentBasedNavigation',
+        SemanticObject: 'DevelopmentObjects',
+        Action        : 'manage',
+    }, ]
+);

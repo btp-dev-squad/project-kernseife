@@ -124,6 +124,11 @@
     "containerLayout": "resizable",
     "enableLiveFilter": true,
     "enableLazyRendering": true,
+    "refreshStrategyOnAppRestore": {
+      "entitySets": {
+        "<entitySetToRefresh>": "self"
+      }
+    },
     "considerAnalyticalParameters": false,
     "cards": {
       "languageVersionShare": {
@@ -138,6 +143,28 @@
           "presentationAnnotationPath": "com.sap.vocabularies.UI.v1.PresentationVariant#languageVersionShare",
           "dataPointAnnotationPath": "com.sap.vocabularies.UI.v1.DataPoint#languageVersionShare",
           "chartAnnotationPath": "com.sap.vocabularies.UI.v1.Chart#languageVersionShare",
+          "chartProperties": {
+            "plotArea": {
+              "dataLabel": {
+                "type": "percentage"
+              }
+            }
+          },
+          "bEnableStableColors": true
+        }
+      },
+      "levelShare": {
+        "model": "mainModel",
+        "template": "sap.ovp.cards.v4.charts.analytical",
+        "settings": {
+          "title": "{{levelShare}}",
+          "subTitle": "{{levelShareSubTitle}}",
+          "entitySet": "DevelopmentObjects",
+          "valueSelectionInfo": "{{levelShareValueSelectionInfo}}",
+          "identificationAnnotationPath": "com.sap.vocabularies.UI.v1.Identification#levelShare",
+          "presentationAnnotationPath": "com.sap.vocabularies.UI.v1.PresentationVariant#levelShare",
+          "dataPointAnnotationPath": "com.sap.vocabularies.UI.v1.DataPoint#levelShare",
+          "chartAnnotationPath": "com.sap.vocabularies.UI.v1.Chart#levelShare",
           "chartProperties": {
             "plotArea": {
               "dataLabel": {
