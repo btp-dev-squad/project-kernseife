@@ -19,6 +19,7 @@ annotate service.DevelopmentObjects with @(
             devClass,
             systemId,
             extension,
+            level,
             languageVersion_code,
             namespace
         ],

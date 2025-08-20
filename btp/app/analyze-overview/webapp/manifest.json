@@ -129,7 +129,6 @@
         "<entitySetToRefresh>": "self"
       }
     },
-    "considerAnalyticalParameters": false,
     "cards": {
       "languageVersionShare": {
         "model": "mainModel",
@@ -141,7 +140,6 @@
           "valueSelectionInfo": "{{languageVersionShareValueSelectionInfo}}",
           "identificationAnnotationPath": "com.sap.vocabularies.UI.v1.Identification#languageVersionShare",
           "presentationAnnotationPath": "com.sap.vocabularies.UI.v1.PresentationVariant#languageVersionShare",
-          "dataPointAnnotationPath": "com.sap.vocabularies.UI.v1.DataPoint#languageVersionShare",
           "chartAnnotationPath": "com.sap.vocabularies.UI.v1.Chart#languageVersionShare",
           "chartProperties": {
             "plotArea": {
@@ -150,7 +148,11 @@
               }
             }
           },
-          "bEnableStableColors": true
+          "bEnableStableColors": true,
+          "defaultSpan": {
+            "rows": 1,
+            "cols": 1
+          }
         }
       },
       "levelShare": {
@@ -163,7 +165,6 @@
           "valueSelectionInfo": "{{levelShareValueSelectionInfo}}",
           "identificationAnnotationPath": "com.sap.vocabularies.UI.v1.Identification#levelShare",
           "presentationAnnotationPath": "com.sap.vocabularies.UI.v1.PresentationVariant#levelShare",
-          "dataPointAnnotationPath": "com.sap.vocabularies.UI.v1.DataPoint#levelShare",
           "chartAnnotationPath": "com.sap.vocabularies.UI.v1.Chart#levelShare",
           "chartProperties": {
             "plotArea": {
@@ -172,12 +173,127 @@
               }
             }
           },
-          "bEnableStableColors": true
+          "bEnableStableColors": true,
+          "defaultSpan": {
+            "rows": 1,
+            "cols": 1
+          }
+        }
+      },
+      "scoreShare": {
+        "model": "mainModel",
+        "template": "sap.ovp.cards.v4.charts.analytical",
+        "settings": {
+          "title": "{{scoreShare}}",
+          "subTitle": "{{scoreShareSubTitle}}",
+          "entitySet": "DevelopmentObjects",
+          "valueSelectionInfo": "{{scoreShareValueSelectionInfo}}",
+          "identificationAnnotationPath": "com.sap.vocabularies.UI.v1.Identification#scoreShare",
+          "presentationAnnotationPath": "com.sap.vocabularies.UI.v1.PresentationVariant#scoreShare",
+          "chartAnnotationPath": "com.sap.vocabularies.UI.v1.Chart#scoreShare",
+          "chartProperties": {
+            "plotArea": {
+              "dataLabel": {
+                "type": "percentage"
+              }
+            }
+          },
+          "bEnableStableColors": true,
+          "defaultSpan": {
+            "rows": 1,
+            "cols": 1
+          }
+        }
+      },
+      "ratingShare": {
+        "model": "mainModel",
+        "template": "sap.ovp.cards.v4.charts.analytical",
+        "settings": {
+          "title": "{{ratingShare}}",
+          "subTitle": "{{ratingShareSubTitle}}",
+          "entitySet": "Classifications",
+          "valueSelectionInfo": "{{ratingShareValueSelectionInfo}}",
+          "identificationAnnotationPath": "com.sap.vocabularies.UI.v1.Identification#ratingShare",
+          "presentationAnnotationPath": "com.sap.vocabularies.UI.v1.PresentationVariant#ratingShare",
+          "chartAnnotationPath": "com.sap.vocabularies.UI.v1.Chart#ratingShare",
+          "bEnableStableColors": true,
+          "measureAggregate": {
+            "Axis1": "sum"
+          },
+          "defaultSpan": {
+            "rows": 1,
+            "cols": 1
+          }
+        }
+      },
+      "topPackages": {
+        "model": "mainModel",
+        "template": "sap.ovp.cards.v4.table",
+        "settings": {
+          "defaultSpan": {
+            "rows": 3,
+            "cols": 4
+          },
+          "title": "{{topPackages}}",
+          "subTitle": "{{topPackagesSubTitle}}",
+          "listFlavor": "carousel",
+          "listType": "extended",
+          "entitySet": "DevClasses",
+          "tabs": [
+            {
+              "annotationPath": "com.sap.vocabularies.UI.v1.LineItem#topPackagesByScoreSum",
+              "presentationAnnotationPath": "com.sap.vocabularies.UI.v1.PresentationVariant#topPackagesByScoreSum",
+              "sortBy": "score",
+              "sortOrder": "descending",
+              "value": "{i18n>topPackagesByScoreSum}"
+            },
+            {
+              "annotationPath": "com.sap.vocabularies.UI.v1.LineItem#topPackagesByScoreAvg",
+              "presentationAnnotationPath": "com.sap.vocabularies.UI.v1.PresentationVariant#topPackagesByScoreAvg",
+              "sortBy": "averageScore",
+              "sortOrder": "descending",
+              "value": "{i18n>topPackagesByScoreAvg}"
+            },
+            {
+              "annotationPath": "com.sap.vocabularies.UI.v1.LineItem#topPackagesByObjectCount",
+              "presentationAnnotationPath": "com.sap.vocabularies.UI.v1.PresentationVariant#topPackagesByObjectCount",
+              "sortBy": "objectCount",
+              "sortOrder": "descending",
+              "value": "{i18n>topPackagesByObjectCount}"
+            }
+          ]
+        }
+      },
+      "topDevelopmentObjects": {
+        "model": "mainModel",
+        "template": "sap.ovp.cards.v4.table",
+        "settings": {
+          "defaultSpan": {
+            "rows": 3,
+            "cols": 4
+          },
+          "title": "{{topDevelopmentObjects}}",
+          "subTitle": "{{topDevelopmentObjectsSubTitle}}",
+          "listFlavor": "carousel",
+          "listType": "extended",
+          "entitySet": "DevelopmentObjects",
+          "tabs": [
+            {
+              "annotationPath": "com.sap.vocabularies.UI.v1.LineItem#topDevelopmentObjects",
+              "presentationAnnotationPath": "com.sap.vocabularies.UI.v1.PresentationVariant#topDevelopmentObjects",
+              "sortBy": "score",
+              "sortOrder": "descending",
+              "value": "{i18n>topDevelopmentObjects}"
+            }
+          ]
         }
       }
     },
+    "disableTableCardFlexibility": false,
     "globalFilterControlType": "MacroFilterBar",
-    "chartSettings": {},
+    "chartSettings": {
+      "showDataLabel": false
+    },
     "refreshIntervalInMinutes": 5,
     "dataLoadSettings": {
       "loadDataOnAppLaunch": "always"

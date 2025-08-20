@@ -39,7 +39,6 @@ export const uploadFile = async (
 ): Promise<string> => {
   LOG.info('Uploading file', {
     fileName: fileName,
-    file,
     type: importType,
     defaultRating,
     systemId,
@@ -55,7 +54,7 @@ export const uploadFile = async (
       if (!systemId) {
         throw new Error('No SystemId provided');
       }
-      await createImport(
+      return await createImport(
         importType,
         fileName,
         file,
@@ -64,7 +63,6 @@ export const uploadFile = async (
         defaultRating,
         comment
       );
-      break;
     case 'MISSING_CLASSIFICATION':
       break;
     case 'ENHANCEMENT':

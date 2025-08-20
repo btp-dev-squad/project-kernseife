@@ -5,7 +5,6 @@ service AnalyticsService @(requires: [
     'admin'
 ]) {
 
-
     @Aggregation.CustomAggregate #score: 'Edm.Decimal'
     @readonly
     entity DevelopmentObjects            as
@@ -32,12 +31,33 @@ service AnalyticsService @(requires: [
         where
             latestFindingImportId != '';
 
+
+    @cds.redirection.target: false
+    @readonly
+    entity DevClasses                    as
+        select from db.DevelopmentObjects {
+            key systemId,
+            key devClass,
+                sum(score) as score        : Integer,
+                max(level) as level        : String,
+                count( * ) as objectCount  : Integer,
+                avg(score) as averageScore : Decimal(10, 3)
+        }
+        group by
+            systemId,
+            devClass;
+
     @readonly
     entity FindingsAggregated            as projection on db.FindingsAggregated;
 
     @readonly
     entity Classifications               as
-        projection on db.Classifications
+        projection on db.Classifications {
+            *,
+            @Analytics.Measure: true  @Aggregation.default: #SUM
+            @Common.Label     : '{i18n>objectCount}'
+            1 as objectCount : Integer
+        }
         excluding {
             developemtObjectList
         };
