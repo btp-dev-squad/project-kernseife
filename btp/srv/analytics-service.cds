@@ -21,18 +21,18 @@ service AnalyticsService @(requires: [
             languageVersion,
             languageVersion_code,
             findingListAggregated,
-            latestScoringImportId,
+            latestFindingImportId,
             namespace,
-            @Analytics.Measure  : true  @Aggregation.default: #SUM
+            @Analytics.Measure: true  @Aggregation.default: #SUM
             score,
-            @Analytics.Measure  : true  @Aggregation.default: #SUM
+            @Analytics.Measure: true  @Aggregation.default: #SUM
             1 as objectCount : Integer
         }
         where
-            latestScoringImportId != '';
+            latestFindingImportId != '';
 
     @readonly
-    entity ScoringFindingsAggregated     as projection on db.ScoringFindingsAggregated;
+    entity FindingsAggregated            as projection on db.FindingsAggregated;
 
     @readonly
     entity Classifications               as

@@ -1,107 +1,389 @@
 {
-    "ratingList": [
-        {
-          "code": "BF9",
-          "title": "Business Function - Avoid",
-          "criticality": "E",
-          "score": 9
-        },
-        {
-          "code": "BF1",
-          "title": "Business Function - Recommended",
-          "criticality": "I",
-          "score": 1
-        },
-        {
-          "code": "FW3",
-          "title": "Framework - Utility",
-          "criticality": "I",
-          "score": 3
-        },
-        {
-          "code": "BF5",
-          "title": "Business Function - Internal",
-          "criticality": "W",
-          "score": 5
-        },
-        {
-          "code": "FW1",
-          "title": "Framework - Recommended",
-          "criticality": "I",
-          "score": 1
-        },
-        {
-          "code": "MIG",
-          "title": "Migration required",
-          "criticality": "E",
-          "score": 0
-        },
-        {
-          "code": "BF0",
-          "title": "Business Function - Released",
-          "criticality": "S",
-          "score": 0
-        },
-        {
-          "code": "NOC",
-          "title": "Missing Classification",
-          "criticality": "E",
-          "score": 0
-        },
-        {
-          "code": "FW0",
-          "title": "Framework - Released",
-          "criticality": "S",
-          "score": 0
-        },
-        {
-          "code": "MSG",
-          "title": "Message Class",
-          "criticality": "I",
-          "score": 1
-        },
-        {
-          "code": "DDC",
-          "title": "DDIC - Complex",
-          "criticality": "I",
-          "score": 3
-        },
-        {
-          "code": "FW5",
-          "title": "Framework - Internal",
-          "criticality": "W",
-          "score": 5
-        },
-        {
-          "code": "BF3",
-          "title": "Business Function - Utility",
-          "criticality": "I",
-          "score": 3
-        },
-        {
-          "code": "TBL",
-          "title": "Database Table",
-          "criticality": "E",
-          "score": 10
-        },
-        {
-          "code": "DDS",
-          "title": "DDIC - Simple",
-          "criticality": "I",
-          "score": 1
-        },
-        {
-          "code": "ENH",
-          "title": "BADI",
-          "criticality": "I",
-          "score": 0
-        },
-        {
-          "code": "FW9",
-          "title": "Framework - Avoid",
-          "criticality": "E",
-          "score": 9
-        }
-       ],
-    "frameworkList": []
-  }
+  "ratingList": [
+    {
+      "code": "BF9",
+      "title": "Business Function - Avoid",
+      "criticality": "E",
+      "score": 9,
+      "level": "D",
+      "usableInClassification": true
+    },
+    {
+      "code": "BF9_SUC",
+      "title": "Business Function - Avoid  (with Successor)",
+      "criticality": "E",
+      "score": 9,
+      "level": "D",
+      "usableInClassification": false
+    },
+    {
+      "code": "BF1",
+      "title": "Business Function - Recommended",
+      "criticality": "I",
+      "score": 1,
+      "level": "B",
+      "usableInClassification": true
+    },
+    {
+      "code": "BF1_SUC",
+      "title": "Business Function - Recommended (with Successor)",
+      "criticality": "I",
+      "score": 1,
+      "level": "B",
+      "usableInClassification": false
+    },
+    {
+      "code": "FW3",
+      "title": "Framework - Utility",
+      "criticality": "I",
+      "score": 3,
+      "level": "B",
+      "usableInClassification": true
+    },
+    {
+      "code": "FW3_SUC",
+      "title": "Framework - Utility (with Successor)",
+      "criticality": "I",
+      "score": 3,
+      "level": "B",
+      "usableInClassification": false
+    },
+    {
+      "code": "BF5",
+      "title": "Business Function - Internal",
+      "criticality": "W",
+      "score": 5,
+      "level": "C",
+      "usableInClassification": true
+    },
+    {
+      "code": "BF5_SUC",
+      "title": "Business Function - Internal (with Successor)",
+      "criticality": "W",
+      "score": 5,
+      "level": "C",
+      "usableInClassification": false
+    },
+    {
+      "code": "FW1",
+      "title": "Framework - Recommended",
+      "criticality": "I",
+      "score": 1,
+      "level": "B",
+      "usableInClassification": true
+    },
+    {
+      "code": "FW1_SUC",
+      "title": "Framework - Recommended (with Successor)",
+      "criticality": "I",
+      "score": 1,
+      "level": "B",
+      "usableInClassification": false
+    },
+    {
+      "code": "MIG",
+      "title": "Migration required",
+      "criticality": "E",
+      "score": 0,
+      "level": "D",
+      "usableInClassification": true
+    },
+    {
+      "code": "BF0",
+      "title": "Business Function - Released",
+      "criticality": "S",
+      "score": 0,
+      "level": "A",
+      "usableInClassification": true
+    },
+    {
+      "code": "BF0_SUC",
+      "title": "Business Function - Released (with Successor)",
+      "criticality": "S",
+      "score": 0,
+      "level": "A",
+      "usableInClassification": false
+    },
+    {
+      "code": "NOC",
+      "title": "Missing Classification",
+      "criticality": "E",
+      "score": 0,
+      "level": "D",
+      "usableInClassification": true
+    },
+    {
+      "code": "FW0",
+      "title": "Framework - Released",
+      "criticality": "S",
+      "score": 0,
+      "level": "A",
+      "usableInClassification": true
+    },
+    {
+      "code": "FW0_SUC",
+      "title": "Framework - Released  (with Successor)",
+      "criticality": "S",
+      "score": 0,
+      "level": "A",
+      "usableInClassification": false
+    },
+    {
+      "code": "MSG",
+      "title": "Message Class",
+      "criticality": "I",
+      "score": 1,
+      "level": "B",
+      "usableInClassification": true
+    },
+    {
+      "code": "MSG_SUC",
+      "title": "Message Class (with Successor)",
+      "criticality": "I",
+      "score": 1,
+      "level": "B",
+      "usableInClassification": false
+    },
+    {
+      "code": "DDC",
+      "title": "DDIC - Complex",
+      "criticality": "I",
+      "score": 3,
+      "level": "B",
+      "usableInClassification": true
+    },
+    {
+      "code": "DDC_SUC",
+      "title": "DDIC - Complex (with Successor)",
+      "criticality": "I",
+      "score": 3,
+      "level": "B",
+      "usableInClassification": false
+    },
+    {
+      "code": "FW5",
+      "title": "Framework - Internal",
+      "criticality": "W",
+      "score": 5,
+      "level": "C",
+      "usableInClassification": true
+    },
+    {
+      "code": "FW5_SUC",
+      "title": "Framework - Internal (with Successor)",
+      "criticality": "W",
+      "score": 5,
+      "level": "C",
+      "usableInClassification": false
+    },
+    {
+      "code": "BF3",
+      "title": "Business Function - Utility",
+      "criticality": "I",
+      "score": 3,
+      "level": "B",
+      "usableInClassification": true
+    },
+    {
+      "code": "BF3_SUC",
+      "title": "Business Function - Utility (with Successor)",
+      "criticality": "I",
+      "score": 3,
+      "level": "B",
+      "usableInClassification": false
+    },
+    {
+      "code": "TBL",
+      "title": "Database Table",
+      "criticality": "E",
+      "score": 10,
+      "level": "D",
+      "usableInClassification": true
+    },
+    {
+      "code": "TBL_SUC",
+      "title": "Database Table (with Successor)",
+      "criticality": "E",
+      "score": 10,
+      "level": "D",
+      "usableInClassification": false
+    },
+    {
+      "code": "DDS",
+      "title": "DDIC - Simple",
+      "criticality": "I",
+      "score": 1,
+      "level": "B",
+      "usableInClassification": true
+    },
+    {
+      "code": "DDS_SUC",
+      "title": "DDIC - Simple (with Successor)",
+      "criticality": "I",
+      "score": 1,
+      "level": "B",
+      "usableInClassification": false
+    },
+    {
+      "code": "FW9",
+      "title": "Framework - Avoid",
+      "criticality": "E",
+      "score": 9,
+      "level": "D",
+      "usableInClassification": true
+    },
+    {
+      "code": "FW9_SUC",
+      "title": "Framework - Avoid (with Successor)",
+      "criticality": "E",
+      "score": 9,
+      "level": "D",
+      "usableInClassification": false
+    },
+    {
+      "code": "EF0",
+      "title": "Enhancement Framework - Released",
+      "criticality": "S",
+      "score": 0,
+      "level": "A",
+      "usableInClassification": true
+    },
+    {
+      "code": "EF0_SUC",
+      "title": "Enhancement Framework - Released (with Successor)",
+      "criticality": "S",
+      "score": 0,
+      "level": "A",
+      "usableInClassification": false
+    },
+    {
+      "code": "EF1",
+      "title": "Enhancement Framework - Recommended",
+      "criticality": "I",
+      "score": 1,
+      "level": "B",
+      "usableInClassification": true
+    },
+    {
+      "code": "EF1_SUC",
+      "title": "Enhancement Framework - Recommended (with Successor)",
+      "criticality": "I",
+      "score": 1,
+      "level": "B",
+      "usableInClassification": false
+    },
+    {
+      "code": "EF5",
+      "title": "Enhancement Framework - Internal",
+      "criticality": "W",
+      "score": 5,
+      "level": "C",
+      "usableInClassification": true
+    },
+    {
+      "code": "EF5_SUC",
+      "title": "Enhancement Framework - Internal (with Successor)",
+      "criticality": "W",
+      "score": 5,
+      "level": "C",
+      "usableInClassification": false
+    },
+    {
+      "code": "EF3",
+      "title": "Enhancement Framework - Utility",
+      "criticality": "I",
+      "score": 3,
+      "level": "B",
+      "usableInClassification": true
+    },
+    {
+      "code": "EF3_SUC",
+      "title": "Enhancement Framework - Utility (with Successor)",
+      "criticality": "I",
+      "score": 3,
+      "level": "B",
+      "usableInClassification": false
+    },
+    {
+      "code": "EF9",
+      "title": "Enhancement Framework - Avoid",
+      "criticality": "E",
+      "score": 10,
+      "level": "D",
+      "usableInClassification": true
+    },
+    {
+      "code": "EF9_SUC",
+      "title": "Enhancement Framework - Avoid (with Successor)",
+      "criticality": "E",
+      "score": 10,
+      "level": "D",
+      "usableInClassification": false
+    },
+    {
+      "code": "TBLSEL",
+      "title": "Reading from SAP database tables or table views",
+      "criticality": "W",
+      "score": 5,
+      "level": "C",
+      "usableInClassification": false
+    },
+    {
+      "code": "TBLSEL_SUC",
+      "title": "Reading from SAP database tables or table views (with Successor)",
+      "criticality": "E",
+      "score": 10,
+      "level": "D",
+      "usableInClassification": false
+    },
+    {
+      "code": "TBLUPD",
+      "title": "Updating SAP database tables or table views",
+      "criticality": "E",
+      "score": 10,
+      "level": "D",
+      "usableInClassification": false
+    },
+    {
+      "code": "TBLUPD_SUC",
+      "title": "Updating SAP database tables or table views (with Successor)",
+      "criticality": "E",
+      "score": 10,
+      "level": "D",
+      "usableInClassification": false
+    },
+    {
+      "code": "TBLTYP",
+      "title": "Usage of SAP database tables as type definition",
+      "criticality": "I",
+      "score": 1,
+      "level": "B",
+      "usableInClassification": false
+    },
+    {
+      "code": "TBLTYP_SUC",
+      "title": "Usage of SAP database tables as type definition (with Successor)",
+      "criticality": "I",
+      "score": 3,
+      "level": "B",
+      "usableInClassification": false
+    },
+    {
+      "code": "TBLCDS",
+      "title": "Usage of SAP database tables in CDS views",
+      "criticality": "W",
+      "score": 5,
+      "level": "C",
+      "usableInClassification": false
+    },
+    {
+      "code": "TBLCDS_SUC",
+      "title": "Usage of SAP database tables in CDS views (with Successor)",
+      "criticality": "E",
+      "score": 10,
+      "level": "D",
+      "usableInClassification": false
+    }
+  ],
+  "frameworkList": []
+}

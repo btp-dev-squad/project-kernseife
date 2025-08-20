@@ -1,14 +1,15 @@
 using AdminService as service from '../../srv/admin-service';
 
 annotate service.DevelopmentObjects with @(
-    Capabilities: {FilterFunctions: ['tolower', ]},
-    UI.Identification : [
-        // {
-        //     $Type : 'UI.DataFieldForAction',
-        //     Action : 'AdminService.calculateScore',
-        //     Label : 'calculateScore',
-        // },
-    ],
+    Capabilities     : {FilterFunctions: ['tolower',
+    ]},
+    UI.Identification: [
+                        // {
+                        //     $Type : 'UI.DataFieldForAction',
+                        //     Action : 'AdminService.calculateScore',
+                        //     Label : 'calculateScore',
+                        // },
+                       ],
 );
 
 annotate service.DevelopmentObjects with @(UI.LineItem: [
@@ -56,9 +57,9 @@ annotate service.DevelopmentObjects with @(UI.LineItem: [
         Value            : score,
         ![@UI.Importance]: #High,
     },
-     {
+    {
         $Type : 'UI.DataFieldForAction',
-         Action: 'AdminService.EntityContainer/recalculateAllScores',
+        Action: 'AdminService.EntityContainer/recalculateAllScores',
         Label : '{i18n>recalculateAllScores}',
     },
 ]);
@@ -91,6 +92,11 @@ annotate service.DevelopmentObjects with @(
                 $Type: 'UI.DataField',
                 Label: '{i18n>score}',
                 Value: score,
+            },
+            {
+                $Type: 'UI.DataField',
+                Label: '{i18n>level}',
+                Value: level,
             }
         ],
     },
@@ -119,17 +125,18 @@ annotate service.DevelopmentObjects with @(UI.SelectionFields: [
 ]);
 
 annotate service.DevelopmentObjects with {
-    namespace      @Common.Label: '{i18n>namespace}';
-    systemId       @Common.Label: '{i18n>systemId}';
-    devClass       @Common.Label: '{i18n>devClass}';
-    objectType     @Common.Label: '{i18n>objectType}';
+    namespace  @Common.Label: '{i18n>namespace}';
+    systemId   @Common.Label: '{i18n>systemId}';
+    devClass   @Common.Label: '{i18n>devClass}';
+    objectType @Common.Label: '{i18n>objectType}';
 };
 
 annotate service.DevelopmentObjects with @(UI.SelectionPresentationVariant #table: {
     $Type              : 'UI.SelectionPresentationVariantType',
     PresentationVariant: {
         $Type         : 'UI.PresentationVariantType',
-        Visualizations: ['@UI.LineItem', ],
+        Visualizations: ['@UI.LineItem',
+        ],
         GroupBy       : [],
         Total         : [score // This shit doesn't work?!
         ],
@@ -153,7 +160,7 @@ annotate service.DevelopmentObjects with @(UI.SelectionPresentationVariant #tabl
     },
 });
 
-annotate service.ScoringFindingsAggregated with @(
+annotate service.FindingsAggregated with @(
     UI.LineItem #findingList                    : [
         {
             $Type                : 'UI.DataField',
@@ -177,6 +184,15 @@ annotate service.ScoringFindingsAggregated with @(
             CriticalityRepresentation: #WithoutIcon,
             ![@UI.Importance]        : #High,
             ![@HTML5.CssDefaults]    : {width: '16rem'},
+        },
+        {
+            $Type                    : 'UI.DataField',
+            Value                    : level,
+            Label                    : '{i18n>level}',
+            Criticality              : criticality.criticality,
+            CriticalityRepresentation: #WithoutIcon,
+            ![@UI.Importance]        : #Medium,
+            ![@HTML5.CssDefaults]    : {width: '4rem'},
         },
         {
             $Type                    : 'UI.DataField',
@@ -214,7 +230,8 @@ annotate service.ScoringFindingsAggregated with @(
         $Type              : 'UI.SelectionPresentationVariantType',
         PresentationVariant: {
             $Type         : 'UI.PresentationVariantType',
-            Visualizations: ['@UI.LineItem#findingList', ],
+            Visualizations: ['@UI.LineItem#findingList',
+            ],
             SortOrder     : [{
                 $Type     : 'Common.SortOrderType',
                 Property  : total,

@@ -264,7 +264,7 @@ annotate service.DevelopmentObjects with {
     score                @Common.Label: '{i18n>score}';
 };
 
-annotate service.ScoringFindingsAggregated with @(
+annotate service.FindingsAggregated with @(
     UI.LineItem #findingList                    : [
         {
             $Type                : 'UI.DataField',

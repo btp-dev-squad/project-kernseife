@@ -32,11 +32,11 @@ service ViewerService @(requires: [
             findingList
         }
         where
-            latestScoringImportId != '';
+            latestFindingImportId != '';
 
 
     @readonly
-    entity ScoringFindingsAggregated     as projection on db.ScoringFindingsAggregated;
+    entity FindingsAggregated     as projection on db.FindingsAggregated;
 
 
     @readonly

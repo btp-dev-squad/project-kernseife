@@ -18,7 +18,7 @@ service AdminService @(requires: 'admin') {
 
     entity DevelopmentObjects            as projection on db.DevelopmentObjects
                                             where
-                                                latestScoringImportId != ''
+                                                latestFindingImportId != ''
         actions {
             @(Common.SideEffects: {TargetEntities: [
                 '/AdminService.EntityContainer/DevelopmentObjects/findingListAggregated'
@@ -28,13 +28,13 @@ service AdminService @(requires: 'admin') {
 
     entity Imports                       as projection on db.Imports;
 
-    entity ScoringRecords                as
-        projection on db.ScoringRecords {
+    entity FindingRecords                as
+        projection on db.FindingRecords {
             *,
-            developmentObject.latestScoringImportId as latestScoringimportId
+            developmentObject.latestFindingImportId as latestFindingimportId
         };
 
-    entity ScoringFindingsAggregated     as projection on db.ScoringFindingsAggregated;
+    entity FindingsAggregated     as projection on db.FindingsAggregated;
     entity SimplificationItems           as projection on db.SimplificationItems;
 
     type inFramework         : {

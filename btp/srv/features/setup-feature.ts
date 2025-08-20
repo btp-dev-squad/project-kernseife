@@ -43,7 +43,9 @@ export const createInitialData = async (
         code: rating.code,
         title: rating.title,
         score: rating.score,
-        criticality_code: rating.criticality
+        criticality_code: rating.criticality,
+        level: rating.level,
+        usableInClassification: rating.usableInClassification ?? true,
       }));
       await INSERT.into(entities.Ratings).entries(ratingList);
     }
