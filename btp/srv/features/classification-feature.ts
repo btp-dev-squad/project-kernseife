@@ -101,6 +101,39 @@ export const getClassificationSet = async (): Promise<Set<string>> => {
   return classificationSet;
 };
 
+export const getSuccessorKey = (objectType: string, objectName: string): string  => {
+  return objectType + objectName;
+}
+
+export const getSuccessorRatingMap = async (): Promise<Map<string, string>> => {
+  const ratingScoreMap = await getRatingScoreMap();
+  // Load all Successors that exist
+  const successorList = await SELECT.from(entities.SuccessorRatings).columns(
+    'tadirObjectType',
+    'tadirObjectName',
+    'objectType',
+    'objectName',
+    'successorClassification.rating_code as code'
+  );
+  const successorRatingMap = new Map<string, string>();
+  for (const successor of successorList) {
+    const key = getSuccessorKey(successor.objectType, successor.objectName);
+    if (successorRatingMap.has(key)) {
+      // Compare Score
+      const ratingOld = successorRatingMap.get(key) as string;
+      const oldScore = ratingScoreMap.get(ratingOld) || 9;
+      const newScore = ratingScoreMap.get(successor.code) || 9;
+      if (newScore < oldScore) {
+        successorRatingMap.set(key, successor.code);
+      }
+    } else {
+      successorRatingMap.set(key, successor.code);
+    }
+  }
+
+  return successorRatingMap;
+};
+
 export const getClassificationRatingMap = async (): Promise<
   Map<string, string>
 > => {
@@ -305,6 +338,16 @@ const getDefaultRatingCode = (classification: Classification) => {
     default:
       return getRatingforBusinessAndFrameworks(classification);
   }
+};
+
+export const getRatingScoreMap = async (): Promise<Map<string, number>> => {
+  const ratingList = await SELECT.from(entities.Ratings, (c) => {
+    c.code, c.score;
+  });
+  return ratingList.reduce((map, rating) => {
+    map.set(rating.code, rating.score);
+    return map;
+  }, new Map<string, number>());
 };
 
 // Can't use the enum, cause CDS TS Support sucks!
@@ -1250,13 +1293,14 @@ const getRatingMap = async (): Promise<Map<string, string>> => {
   });
   return ratingList.reduce((map, rating) => {
     for (const legacyRating of rating.legacyRatingList) {
-      map.put(legacyRating.legacyRating, rating.code);
+      map.set(legacyRating.legacyRating, rating.code);
     }
     // also add the current Rating
-    map.put(rating.code, rating.code);
+    map.set(rating.code, rating.code);
     return map;
   }, new Map<string, string>());
 };
+
 
 const assignFramework = async (
   classification: Classification,

@@ -20,9 +20,7 @@ service AdminService @(requires: 'admin') {
                                             where
                                                 latestFindingImportId != ''
         actions {
-            @(Common.SideEffects: {TargetEntities: [
-                '/AdminService.EntityContainer/DevelopmentObjects/findingListAggregated'
-            ], })
+            @(Common.SideEffects: {TargetEntities: ['/AdminService.EntityContainer/DevelopmentObjects/findingListAggregated'], })
             action recalculateScore() returns DevelopmentObjects;
         }
 
@@ -34,7 +32,7 @@ service AdminService @(requires: 'admin') {
             developmentObject.latestFindingImportId as latestFindingimportId
         };
 
-    entity FindingsAggregated     as projection on db.FindingsAggregated;
+    entity FindingsAggregated            as projection on db.FindingsAggregated;
     entity SimplificationItems           as projection on db.SimplificationItems;
 
     type inFramework         : {
@@ -54,13 +52,13 @@ service AdminService @(requires: 'admin') {
     entity Classifications               as projection on db.Classifications
         actions {
             @(Common.SideEffects: {TargetEntities: ['in/frameworkUsageList'], })
-            action assignFramework( @mandatory frameworkCode : inFramework   : code)          returns Classifications;
+            action assignFramework( @mandatory frameworkCode: inFramework:code)          returns Classifications;
             @(Common.SideEffects: {TargetEntities: ['in/frameworkUsageList'], })
-            action assignSuccessor( @mandatory tadirObjectType : inSuccessor : tadirObjectType,
-                                    @mandatory tadirObjectName : inSuccessor : tadirObjectName,
-                                    @mandatory objectType : inSuccessor      : objectType,
-                                    @mandatory objectName : inSuccessor      : objectName,
-                                    @mandatory successorType : inSuccessor   : successorType) returns Classifications;
+            action assignSuccessor( @mandatory tadirObjectType: inSuccessor:tadirObjectType,
+                                    @mandatory tadirObjectName: inSuccessor:tadirObjectName,
+                                    @mandatory objectType: inSuccessor:objectType,
+                                    @mandatory objectName: inSuccessor:objectName,
+                                    @mandatory successorType: inSuccessor:successorType) returns Classifications;
         };
 
     entity FrameworkUsages               as projection on db.FrameworkUsages;
@@ -110,14 +108,14 @@ service AdminService @(requires: 'admin') {
             @(Common.SideEffects: {TargetEntities: ['in/developemtObjectList'], })
             action clearDevelopmentObjectList();
             @(Common.SideEffects: {TargetEntities: ['in/developemtObjectList'], })
-            action addDevelopmentObjectsByDevClass( @mandatory devClass : inDevClass : devClass);
+            action addDevelopmentObjectsByDevClass( @mandatory devClass: inDevClass:devClass);
             @(Common.SideEffects: {TargetEntities: ['in/developemtObjectList'], })
             action addUnassignedDevelopmentObjects();
             @(Common.SideEffects: {TargetEntities: ['in/developemtObjectList'], })
             action addDevelopmentObject(
-            @mandatory objectType : inDevelopmentObject                              : objectType,
-                                        @mandatory objectName : inDevelopmentObject  : objectName,
-                                        @mandatory devClass : inDevelopmentObject    : devClass);
+            @mandatory objectType: inDevelopmentObject:objectType,
+                                        @mandatory objectName: inDevelopmentObject:objectName,
+                                        @mandatory devClass: inDevelopmentObject:devClass);
         }
 
     type inInitialData       : {
@@ -133,11 +131,11 @@ service AdminService @(requires: 'admin') {
         actions {
             @Common.IsActionCritical: true
             action createInitialData(
-            @mandatory contactPerson : inInitialData                          : contactPerson,
-                                     @mandatory prefix : inInitialData        : prefix,
-                                     @mandatory customerTitle : inInitialData : customerTitle,
-                                     configUrl : inInitialData                : configUrl @UI.ParameterDefaultValue: 'https://raw.githubusercontent.com/SAP/project-kernseife/refs/heads/main/defaultSetup.json',
-                                     classificationUrl : inInitialData        : classificationUrl @UI.ParameterDefaultValue: 'https://raw.githubusercontent.com/SAP/project-kernseife/refs/heads/main/defaultClassification.csv'
+            @mandatory contactPerson: inInitialData:contactPerson,
+                                     @mandatory prefix: inInitialData:prefix,
+                                     @mandatory customerTitle: inInitialData:customerTitle,
+                                     configUrl: inInitialData:configUrl @UI.ParameterDefaultValue: 'https://raw.githubusercontent.com/SAP/project-kernseife/refs/heads/main/defaultSetup.json',
+                                     classificationUrl: inInitialData:classificationUrl @UI.ParameterDefaultValue: 'https://raw.githubusercontent.com/SAP/project-kernseife/refs/heads/main/defaultClassification.csv'
 
             );
         };
@@ -226,8 +224,8 @@ service AdminService @(requires: 'admin') {
 
 
     event Imported : { // Async API
-        ID   : Imports : ID;
-        type : Imports : type;
+        ID   : Imports:ID;
+        type : Imports:type;
     }
 
     entity FileUpload                    as projection on db.FileUpload;

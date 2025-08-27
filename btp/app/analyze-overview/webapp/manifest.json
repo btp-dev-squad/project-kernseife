@@ -205,6 +205,45 @@
           }
         }
       },
+      "cleanupPotentialDevelopmentObjects": {
+        "model": "mainModel",
+        "template": "sap.ovp.cards.v4.charts.analytical",
+        "settings": {
+          "title": "{{cleanupPotentialDevevelopmentObjects}}",
+          "subTitle": "{{cleanupPotentialDevevelopmentObjectsSubTitle}}",
+          "entitySet": "DevelopmentObjects",
+          "valueSelectionInfo": "{{cleanupPotentialDevevelopmentObjectsValueSelectionInfo}}",
+          "identificationAnnotationPath": "com.sap.vocabularies.UI.v1.Identification#cleanupPotential",
+          "presentationAnnotationPath": "com.sap.vocabularies.UI.v1.PresentationVariant#cleanupPotential",
+          "chartAnnotationPath": "com.sap.vocabularies.UI.v1.Chart#cleanupPotential",
+          "bEnableStableColors": false,
+          "measureAggregate": {
+            "Axis1": "sum"
+          },
+          "defaultSpan": {
+            "rows": 1,
+            "cols": 1
+          }
+        }
+      },
+      "cleanupPotentialDevClasses": {
+        "model": "mainModel",
+        "template": "sap.ovp.cards.v4.charts.analytical",
+        "settings": {
+          "title": "{{cleanupPotentialDevClasses}}",
+          "subTitle": "{{cleanupPotentialDevClassesSubTitle}}",
+          "entitySet": "DevClasses",
+          "valueSelectionInfo": "{{cleanupPotentialDevClassesValueSelectionInfo}}",
+          "identificationAnnotationPath": "com.sap.vocabularies.UI.v1.Identification#cleanupPotential",
+          "presentationAnnotationPath": "com.sap.vocabularies.UI.v1.PresentationVariant#cleanupPotential",
+          "chartAnnotationPath": "com.sap.vocabularies.UI.v1.Chart#cleanupPotential",
+          "bEnableStableColors": false,
+          "defaultSpan": {
+            "rows": 1,
+            "cols": 1
+          }
+        }
+      },
       "ratingShare": {
         "model": "mainModel",
         "template": "sap.ovp.cards.v4.charts.analytical",
@@ -260,6 +299,13 @@
               "sortBy": "objectCount",
               "sortOrder": "descending",
               "value": "{i18n>topPackagesByObjectCount}"
+            },
+            {
+              "annotationPath": "com.sap.vocabularies.UI.v1.LineItem#topPackagesByCleanupPotential",
+              "presentationAnnotationPath": "com.sap.vocabularies.UI.v1.PresentationVariant#topPackagesByCleanupPotential",
+              "sortBy": "objectCount",
+              "sortOrder": "descending",
+              "value": "{i18n>topPackagesByCleanupPotential}"
             }
           ]
         }
@@ -279,11 +325,25 @@
           "entitySet": "DevelopmentObjects",
           "tabs": [
             {
-              "annotationPath": "com.sap.vocabularies.UI.v1.LineItem#topDevelopmentObjects",
-              "presentationAnnotationPath": "com.sap.vocabularies.UI.v1.PresentationVariant#topDevelopmentObjects",
+              "annotationPath": "com.sap.vocabularies.UI.v1.LineItem#topDevelopmentObjectsByScore",
+              "presentationAnnotationPath": "com.sap.vocabularies.UI.v1.PresentationVariant#topDevelopmentObjectsByScore",
               "sortBy": "score",
               "sortOrder": "descending",
-              "value": "{i18n>topDevelopmentObjects}"
+              "value": "{i18n>topDevelopmentObjectsByScore}"
+            },
+            {
+              "annotationPath": "com.sap.vocabularies.UI.v1.LineItem#topDevelopmentObjectsByCleanupPotentialAbs",
+              "presentationAnnotationPath": "com.sap.vocabularies.UI.v1.PresentationVariant#topDevelopmentObjectsByCleanupPotentialAbs",
+              "sortBy": "cleanupPotential",
+              "sortOrder": "descending",
+              "value": "{i18n>topDevelopmentObjectsByCleanupPotentialAbs}"
+            },
+            {
+              "annotationPath": "com.sap.vocabularies.UI.v1.LineItem#topDevelopmentObjectsByCleanupPotentialRel",
+              "presentationAnnotationPath": "com.sap.vocabularies.UI.v1.PresentationVariant#topDevelopmentObjectsByCleanupPotentialRel",
+              "sortBy": "cleanupPotentialPercent",
+              "sortOrder": "descending",
+              "value": "{i18n>topDevelopmentObjectsByCleanupPotentialRel}"
             }
           ]
         }

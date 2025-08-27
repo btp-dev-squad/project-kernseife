@@ -10,7 +10,7 @@
       "skipFiles": ["<node_internals>/**"]
     },
     {
-      "command": "cds watch --with-mocks --in-memory?",
+      "command": "npm run dev",
       "cwd": "${workspaceFolder}/btp",
       "name": "cds watch",
       "request": "launch",

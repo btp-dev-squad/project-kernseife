@@ -21,8 +21,8 @@ entity DevelopmentObjects : managed {
                 }]
             }
         })
-    key objectType            : String;
-    key objectName            : String;
+    key objectType              : String;
+    key objectName              : String;
 
         @readonly
         @(Common                        : {
@@ -36,7 +36,7 @@ entity DevelopmentObjects : managed {
                 }]
             }
         })
-    key devClass              : String;
+    key devClass                : String;
 
         @Common.ValueListWithFixedValues: true
         @(Common                        : {
@@ -56,16 +56,16 @@ entity DevelopmentObjects : managed {
                 ]
             }
         })
-    key systemId              : String;
-        system                : Association to Systems
-                                    on system.sid = $self.systemId;
+    key systemId                : String;
+        system                  : Association to Systems
+                                      on system.sid = $self.systemId;
 
         @readonly
-        extension_ID          : String;
+        extension_ID            : String;
 
         @readonly
-        extension             : Association to Extensions
-                                    on extension.ID = $self.extension_ID;
+        extension               : Association to Extensions
+                                      on extension.ID = $self.extension_ID;
 
         @Common.ValueListWithFixedValues: true
         @(Common                        : {
@@ -79,10 +79,10 @@ entity DevelopmentObjects : managed {
                 }]
             }
         })
-        namespace             : String;
-        softwareComponent     : String;
-        languageVersion       : Association to LanguageVersions
-                                    on languageVersion.code = $self.languageVersion_code;
+        namespace               : String;
+        softwareComponent       : String;
+        languageVersion         : Association to LanguageVersions
+                                      on languageVersion.code = $self.languageVersion_code;
 
         @Common.ValueListWithFixedValues: true
         @(Common                        : {
@@ -102,52 +102,68 @@ entity DevelopmentObjects : managed {
                 ]
             }
         })
-        languageVersion_code  : String;
-        latestFindingImportId : String;
-        findingList           : Association to many FindingRecords
-                                    on  findingList.objectType = $self.objectType
-                                    and findingList.objectName = $self.objectName
-                                    and findingList.devClass   = $self.devClass
-                                    and findingList.systemId   = $self.systemId
-                                    and findingList.import.ID  = $self.latestFindingImportId;
+        languageVersion_code    : String;
+        latestFindingImportId   : String;
+        findingList             : Association to many FindingRecords
+                                      on  findingList.objectType = $self.objectType
+                                      and findingList.objectName = $self.objectName
+                                      and findingList.devClass   = $self.devClass
+                                      and findingList.systemId   = $self.systemId
+                                      and findingList.import.ID  = $self.latestFindingImportId;
 
-        findingListAggregated : Association to many FindingsAggregated
-                                    on  findingListAggregated.objectType = $self.objectType
-                                    and findingListAggregated.objectName = $self.objectName
-                                    and findingListAggregated.devClass   = $self.devClass
-                                    and findingListAggregated.systemId   = $self.systemId
-                                    and findingListAggregated.importId   = $self.latestFindingImportId;
+        findingListAggregated   : Association to many FindingsAggregated
+                                      on  findingListAggregated.objectType = $self.objectType
+                                      and findingListAggregated.objectName = $self.objectName
+                                      and findingListAggregated.devClass   = $self.devClass
+                                      and findingListAggregated.systemId   = $self.systemId
+                                      and findingListAggregated.importId   = $self.latestFindingImportId;
 
 
-        score                 : Integer;
-        level                 : CleanCoreLevel;
+        score                   : Integer;
+        potentialScore          : Integer;
+        level                   : CleanCoreLevel;
+        potentialLevel          : CleanCoreLevel;
+        cleanupPotential        : Integer       = score - potentialScore;
+        @Common.Label                   : '{i18n>cleanupPotentialPercent}'
+        @Measures.Unit                  : '%'
+        cleanupPotentialPercent : Decimal(8, 2) = (
+            100.0 - (
+                (
+                    100.0 / score
+                ) * potentialScore
+            )
+        )
 
 }
 
 entity FindingsAggregated           as
-    select from db.FindingRecords as s
-    inner join Ratings as r
-        on s.messageId = r.code
+    select from db.FindingRecords as f
+    inner join Ratings as r1
+        on f.messageId = r1.code
+    left join Ratings as r2
+        on f.potentialMessageId = r2.code
     inner join db.DevelopmentObjects as d
-        on  s.objectType = d.objectType
-        and s.objectName = d.objectName
-        and s.devClass   = d.devClass
-        and s.systemId   = d.systemId
-        and s.import.ID  = d.latestFindingImportId
+        on  f.objectType = d.objectType
+        and f.objectName = d.objectName
+        and f.devClass   = d.devClass
+        and f.systemId   = d.systemId
+        and f.import.ID  = d.latestFindingImportId
     {
-        key s.import.ID          as importId,
-        key s.objectType,
-        key s.objectName,
-        key s.devClass,
-        key s.systemId,
-        key s.refObjectName,
-        key s.refObjectType,
-            s.messageId          as code,
-            r.score              as score,
-            r.level              as level,
-            r.criticality        as criticality,
-            count( * )           as count           : Integer,
-            count( * ) * r.score as total           : Integer,
+        key f.import.ID           as importId,
+        key f.objectType,
+        key f.objectName,
+        key f.devClass,
+        key f.systemId,
+        key f.refObjectName,
+        key f.refObjectType,
+            f.messageId           as code,
+            r1.score              as score,
+            r1.level              as level,
+            r1.criticality        as criticality,
+            r2.score              as potentialScore,
+            r2.level              as potentialLevel,
+            count( * )            as count           : Integer,
+            count( * ) * r1.score as total           : Integer,
             @Measures.Unit: '%'
             case
                 d.score
@@ -156,23 +172,25 @@ entity FindingsAggregated           as
                 else round(
                          (
                              100.0 / d.score
-                         ) * count( * ) * r.score, 2
+                         ) * count( * ) * r1.score, 2
                      )
-            end                  as totalPercentage : Decimal(5, 2)
+            end                   as totalPercentage : Decimal(5, 2)
     }
     group by
-        s.import.ID,
-        s.objectType,
-        s.objectName,
-        s.devClass,
-        s.systemId,
-        s.refObjectName,
-        s.refObjectType,
-        s.messageId,
-        r.score,
-        r.level,
-        d.score,
-        r.criticality;
+        f.import.ID,
+        f.objectType,
+        f.objectName,
+        f.devClass,
+        f.systemId,
+        f.refObjectName,
+        f.refObjectType,
+        f.messageId,
+        r1.score,
+        r1.level,
+        r1.criticality,
+        r2.score,
+        r2.level,
+        d.score;
 
 
 @cds.persistence.journal
@@ -480,31 +498,52 @@ entity Imports : cuid, managed {
 
 @cds.persistence.journal
 entity FindingRecords {
-    key import            : Association to Imports;
-    key itemId            : String;
-        objectType        : String;
-        objectName        : String;
-        refObjectType     : String;
-        refObjectName     : String;
-        devClass          : String;
-        softwareComponent : String;
-        systemId          : String;
-        messageId         : String;
-        rating            : Association to Ratings
-                                on rating.code = $self.messageId;
-        releaseState      : Association to ReleaseStates
-                                on  releaseState.objectType = $self.refObjectType
-                                and releaseState.objectName = $self.refObjectName;
-        developmentObject : Association to DevelopmentObjects
-                                on  developmentObject.objectType = $self.objectType
-                                and developmentObject.objectName = $self.objectName
-                                and developmentObject.devClass   = $self.devClass;
-        classification    : Association to Classifications
-                                on  classification.objectType = $self.refObjectType
-                                and classification.objectName = $self.refObjectName;
+    key import             : Association to Imports;
+    key itemId             : String;
+        objectType         : String;
+        objectName         : String;
+        refObjectType      : String;
+        refObjectName      : String;
+        devClass           : String;
+        softwareComponent  : String;
+        systemId           : String;
+        messageId          : String;
+        potentialMessageId : String;
+        rating             : Association to Ratings
+                                 on rating.code = $self.messageId;
+        potentialRating    : Association to Ratings
+                                 on potentialRating.code = $self.potentialMessageId;
+        releaseState       : Association to ReleaseStates
+                                 on  releaseState.objectType = $self.refObjectType
+                                 and releaseState.objectName = $self.refObjectName;
+        developmentObject  : Association to DevelopmentObjects
+                                 on  developmentObject.objectType = $self.objectType
+                                 and developmentObject.objectName = $self.objectName
+                                 and developmentObject.devClass   = $self.devClass;
+        classification     : Association to Classifications
+                                 on  classification.objectType = $self.refObjectType
+                                 and classification.objectName = $self.refObjectName;
 
 
 }
+
+@cds.redirection.target: false
+entity SuccessorRatings             as
+    projection on db.ClassificationSuccessors {
+        key classification.tadirObjectType as tadirObjectType,
+        key classification.tadirObjectName as tadirObjectName,
+        key classification.objectType      as objectType,
+        key classification.objectName      as objectName,
+            tadirObjectType                as tadirObjectTypeSuccessor,
+            tadirObjectName                as tadirObjectNameSuccessor,
+            objectType                     as objectTypeSuccessor,
+            objectName                     as objectNameSuccessor,
+            successorClassification : Association to Classifications
+                                          on  successorClassification.tadirObjectType = $self.tadirObjectTypeSuccessor
+                                          and successorClassification.tadirObjectName = $self.tadirObjectNameSuccessor
+                                          and successorClassification.objectType      = $self.objectTypeSuccessor
+                                          and successorClassification.objectName      = $self.objectNameSuccessor
+    }
 
 @cds.persistence.journal
 entity SimplificationItems {

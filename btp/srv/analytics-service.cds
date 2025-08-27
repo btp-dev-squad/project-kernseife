@@ -16,7 +16,7 @@ service AnalyticsService @(requires: [
             extension_ID,
             IFNULL(
                 extension.title, 'Unassigned'
-            ) as extension   : String,
+            )                      as extension        : String,
             languageVersion,
             languageVersion_code,
             findingListAggregated,
@@ -24,9 +24,18 @@ service AnalyticsService @(requires: [
             namespace,
             @Analytics.Measure: true  @Aggregation.default: #SUM
             score,
+            @Analytics.Measure: true  @Aggregation.default: #SUM
+            @Common.Label     : '{i18n>cleanupPotential}'
+            cleanupPotential,
+            @Common.Label     : '{i18n>stableScore}'
+            @Analytics.Measure: true  @Aggregation.default: #SUM
+            potentialScore                             : Integer,
+            @Common.Label: '{i18n>potentialLevel}'
+            potentialLevel                             : String,
+            cleanupPotentialPercent                    : Decimal(8, 2),
             level,
             @Analytics.Measure: true  @Aggregation.default: #SUM
-            1 as objectCount : Integer
+            1                      as objectCount      : Integer
         }
         where
             latestFindingImportId != '';
@@ -38,10 +47,18 @@ service AnalyticsService @(requires: [
         select from db.DevelopmentObjects {
             key systemId,
             key devClass,
-                sum(score) as score        : Integer,
-                max(level) as level        : String,
-                count( * ) as objectCount  : Integer,
-                avg(score) as averageScore : Decimal(10, 3)
+                sum(score)                  as score            : Integer,
+                max(level)                  as level            : String,
+                @Common.Label: '{i18n>potentialLevel}'
+                max(potentialLevel)         as potentialLevel   : String,
+                count( * )                  as objectCount      : Integer,
+                @Common.Label     : '{i18n>cleanupPotential}'
+                @Analytics.Measure: false
+                sum(score - potentialScore) as cleanupPotential : Integer,
+                @Common.Label     : '{i18n>stableScore}'
+                @Analytics.Measure: false
+                sum(potentialScore)         as potentialScore   : Integer,
+                avg(score)                  as averageScore     : Decimal(10, 3)
         }
         group by
             systemId,

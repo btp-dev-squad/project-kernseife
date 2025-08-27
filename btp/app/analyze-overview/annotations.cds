@@ -2,7 +2,7 @@ using AnalyticsService as service from '../../srv/analytics-service';
 
 
 annotate service.DevelopmentObjects with @(
-    UI.Chart #languageVersionShare               : {
+    UI.Chart #languageVersionShare                                    : {
         $Type              : 'UI.ChartDefinitionType',
         Title              : '{i18n>languageVersionShare}',
         ChartType          : #Donut,
@@ -19,7 +19,7 @@ annotate service.DevelopmentObjects with @(
             Role   : #Axis1,
         }]
     },
-    UI.PresentationVariant #languageVersionShare : {
+    UI.PresentationVariant #languageVersionShare                      : {
         SortOrder     : [{
             $Type     : 'Common.SortOrderType',
             Property  : languageVersion_code,
@@ -27,20 +27,20 @@ annotate service.DevelopmentObjects with @(
         }],
         Visualizations: ['@UI.Chart#languageVersionShare']
     },
-    UI.DataPoint #languageVersionShare           : {
+    UI.DataPoint #languageVersionShare                                : {
         $Type: 'UI.DataPointType',
         Value: objectCount,
         Title: '{i18n>languageVersionShare}',
     },
 
-    UI.Identification #languageVersionShare      : [{
+    UI.Identification #languageVersionShare                           : [{
         $Type         : 'UI.DataFieldForIntentBasedNavigation',
         SemanticObject: 'DevelopmentObjects',
         Action        : 'manage',
     }, ],
 
 
-    UI.Chart #levelShare                         : {
+    UI.Chart #levelShare                                              : {
         $Type              : 'UI.ChartDefinitionType',
         Title              : '{i18n>levelShare}',
         ChartType          : #Donut,
@@ -58,7 +58,7 @@ annotate service.DevelopmentObjects with @(
             Role   : #Axis1,
         }]
     },
-    UI.PresentationVariant #levelShare           : {
+    UI.PresentationVariant #levelShare                                : {
         SortOrder     : [{
             $Type     : 'Common.SortOrderType',
             Property  : level,
@@ -67,21 +67,21 @@ annotate service.DevelopmentObjects with @(
         }],
         Visualizations: ['@UI.Chart#levelShare']
     },
-    UI.DataPoint #levelShare                     : {
+    UI.DataPoint #levelShare                                          : {
         $Type: 'UI.DataPointType',
         Value: objectCount,
         Title: '{i18n>levelShare }',
 
     },
 
-    UI.Identification #levelShare                : [{
+    UI.Identification #levelShare                                     : [{
         $Type         : 'UI.DataFieldForIntentBasedNavigation',
         SemanticObject: 'DevelopmentObjects',
         Action        : 'manage',
     }, ]
 
     ,
-    UI.Chart #scoreShare                         : {
+    UI.Chart #scoreShare                                              : {
         $Type              : 'UI.ChartDefinitionType',
         Title              : '{i18n>scoreShare}',
         ChartType          : #Donut,
@@ -99,7 +99,7 @@ annotate service.DevelopmentObjects with @(
             Role   : #Axis1
         }]
     },
-    UI.PresentationVariant #scoreShare           : {
+    UI.PresentationVariant #scoreShare                                : {
         SortOrder     : [{
             $Type     : 'Common.SortOrderType',
             Property  : level,
@@ -108,19 +108,19 @@ annotate service.DevelopmentObjects with @(
         }],
         Visualizations: ['@UI.Chart#levelShare']
     },
-    UI.DataPoint #scoreShare                     : {
+    UI.DataPoint #scoreShare                                          : {
         $Type: 'UI.DataPointType',
         Value: score,
-        Title: '{i18n>scoreShare }',
+        Title: '{i18n>scoreShare}',
 
     },
 
-    UI.Identification #scoreShare                : [{
+    UI.Identification #scoreShare                                     : [{
         $Type         : 'UI.DataFieldForIntentBasedNavigation',
         SemanticObject: 'DevelopmentObjects',
         Action        : 'manage',
     }, ],
-    UI.LineItem #topDevelopmentObjects           : [
+    UI.LineItem #topDevelopmentObjectsByScore                                : [
         {
             $Type            : 'UI.DataField',
             Label            : '{i18n>objectType}',
@@ -136,9 +136,42 @@ annotate service.DevelopmentObjects with @(
         },
         {
             $Type            : 'UI.DataField',
-            Label            : '{i18n>devClass}',
+            Label            : '{i18n>level}',
             ![@UI.Importance]: #Low,
-            Value            : devClass
+            Value            : level
+        },
+        {
+            $Type            : 'UI.DataField',
+            Label            : '{i18n>score}',
+            ![@UI.Importance]: #Low,
+            Value            : score
+        },
+        {
+            $Type            : 'UI.DataField',
+            Label            : '{i18n>cleanupPotential}',
+            ![@UI.Importance]: #Low,
+            Value            : cleanupPotential
+        },
+        {
+            $Type            : 'UI.DataFieldForAnnotation',
+            Target           : '@UI.DataPoint#CleanupPotentialPercent',
+            Label            : '{i18n>cleanupPotentialPercent}',
+            ![@UI.Importance]: #Low,
+        },
+    ],
+    UI.LineItem #topDevelopmentObjectsByCleanupPotentialAbs                                : [
+        {
+            $Type            : 'UI.DataField',
+            Label            : '{i18n>objectType}',
+            ![@UI.Importance]: #High,
+            Value            : objectType
+        },
+        {
+            $Type            : 'UI.DataField',
+            Label            : '{i18n>objectName}',
+            ![@UI.Importance]: #High,
+            Value            : objectName,
+
         },
         {
             $Type            : 'UI.DataField',
@@ -151,12 +184,138 @@ annotate service.DevelopmentObjects with @(
             Label            : '{i18n>score}',
             ![@UI.Importance]: #Low,
             Value            : score
-        }
+        },
+        {
+            $Type            : 'UI.DataField',
+            Label            : '{i18n>cleanupPotential}',
+            ![@UI.Importance]: #Low,
+            Value            : cleanupPotential
+        },
+        {
+            $Type            : 'UI.DataFieldForAnnotation',
+            Target           : '@UI.DataPoint#CleanupPotentialPercent',
+            Label            : '{i18n>cleanupPotentialPercent}',
+            ![@UI.Importance]: #Low,
+        },
     ],
-    UI.PresentationVariant #topDevelopmentObjects: {SortOrder: [{
+     UI.LineItem #topDevelopmentObjectsByCleanupPotentialRel                                : [
+        {
+            $Type            : 'UI.DataField',
+            Label            : '{i18n>objectType}',
+            ![@UI.Importance]: #High,
+            Value            : objectType
+        },
+        {
+            $Type            : 'UI.DataField',
+            Label            : '{i18n>objectName}',
+            ![@UI.Importance]: #High,
+            Value            : objectName,
+
+        },
+        {
+            $Type            : 'UI.DataField',
+            Label            : '{i18n>level}',
+            ![@UI.Importance]: #Low,
+            Value            : level
+        },
+        {
+            $Type            : 'UI.DataField',
+            Label            : '{i18n>score}',
+            ![@UI.Importance]: #Low,
+            Value            : score
+        },
+        {
+            $Type            : 'UI.DataField',
+            Label            : '{i18n>cleanupPotential}',
+            ![@UI.Importance]: #Low,
+            Value            : cleanupPotential
+        },
+        {
+            $Type            : 'UI.DataFieldForAnnotation',
+            Target           : '@UI.DataPoint#CleanupPotentialPercent',
+            Label            : '{i18n>cleanupPotentialPercent}',
+            ![@UI.Importance]: #Low,
+        },
+    ],
+    UI.DataPoint #CleanupPotentialPercent                             : {
+        $Type      : 'UI.DataPointType',
+        Title      : '{i18n>CleanupPotentialPercent}',
+        Value      : cleanupPotentialPercent,
+        ValueFormat: {
+            NumberOfFractionalDigits: 2,
+            ScaleFactor             : 1,
+        }
+    },
+    UI.PresentationVariant #topDevelopmentObjectsByScore              : {SortOrder: [{
         Property  : score,
         Descending: true
     }, ]},
+    UI.PresentationVariant #topDevelopmentObjectsByCleanupPotentialAbs: {SortOrder: [{
+        Property  : cleanupPotential,
+        Descending: true
+    }, ]},
+    UI.PresentationVariant #topDevelopmentObjectsByCleanupPotentialRel: {SortOrder: [{
+        Property  : cleanupPotentialPercent,
+        Descending: true
+    }, ]},
+    UI.Chart #cleanupPotential                                        : {
+        $Type              : 'UI.ChartDefinitionType',
+        Title              : '{i18n>cleanupPotential}',
+        ChartType          : #ColumnStacked,
+        Dimensions         : [],
+        DimensionAttributes: [{
+            $Type    : 'UI.ChartDimensionAttributeType',
+            Dimension: objectName,
+            Role     : #Category
+        }],
+        Measures           : [
+            score,
+            potentialScore
+        ],
+        MeasureAttributes  : [
+            {
+                $Type    : 'UI.ChartMeasureAttributeType',
+                Measure  : cleanupPotential,
+                DataPoint: '@UI.DataPoint#cleanupPotential',
+                Role     : #Axis1,
+            },
+            {
+                $Type    : 'UI.ChartMeasureAttributeType',
+                Measure  : potentialScore,
+                DataPoint: '@UI.DataPoint#potentialScore',
+                Role     : #Axis2,
+            }
+        ]
+    },
+    UI.PresentationVariant #cleanupPotential                          : {
+        MaxItems      : 8,
+        SortOrder     : [{
+            $Type     : 'Common.SortOrderType',
+            Property  : score,
+            Descending: true,
+
+        }],
+        Visualizations: ['@UI.Chart#cleanupPotential']
+    },
+    UI.DataPoint #cleanupPotential                                    : {
+        $Type      : 'UI.DataPointType',
+        Value      : cleanupPotential,
+        Title      : '{i18n>cleanupPotential}',
+        Description: '{i18n>cleanupPotential}',
+    },
+    UI.DataPoint #potentialScore                                      : {
+        $Type      : 'UI.DataPointType',
+        Value      : potentialScore,
+        Title      : '{i18n>potentialScore}',
+        Description: '{i18n>potentialScore}',
+    },
+
+
+    UI.Identification #cleanupPotential                               : [{
+        $Type         : 'UI.DataFieldForIntentBasedNavigation',
+        SemanticObject: 'DevelopmentObjects',
+        Action        : 'manage',
+    }, ]
 );
 
 annotate service.Classifications with @(
@@ -207,7 +366,7 @@ annotate service.Classifications with @(
 
 annotate service.DevClasses with @(
 
-    UI.LineItem #topPackagesByScoreSum              : [
+    UI.LineItem #topPackagesByScoreSum                   : [
         {
             $Type            : 'UI.DataField',
             Label            : '{i18n>devClass}',
@@ -222,6 +381,12 @@ annotate service.DevClasses with @(
         },
         {
             $Type            : 'UI.DataField',
+            Label            : '{i18n>potentialLevel}',
+            ![@UI.Importance]: #Low,
+            Value            : potentialLevel
+        },
+        {
+            $Type            : 'UI.DataField',
             Label            : '{i18n>score}',
             ![@UI.Importance]: #High,
             Value            : score
@@ -233,13 +398,20 @@ annotate service.DevClasses with @(
             Value            : objectCount
         },
         {
+            $Type            : 'UI.DataField',
+            Label            : '{i18n>cleanupPotential}',
+            ![@UI.Importance]: #Low,
+            Value            : cleanupPotential
+        },
+
+        {
             $Type            : 'UI.DataFieldForAnnotation',
             Target           : '@UI.DataPoint#AverageScore',
             Label            : '{i18n>averageScore}',
             ![@UI.Importance]: #Low,
         }
     ],
-    UI.LineItem #topPackagesByScoreAvg              : [
+    UI.LineItem #topPackagesByScoreAvg                   : [
         {
             $Type            : 'UI.DataField',
             Label            : '{i18n>devClass}',
@@ -254,9 +426,21 @@ annotate service.DevClasses with @(
         },
         {
             $Type            : 'UI.DataField',
+            Label            : '{i18n>potentialLevel}',
+            ![@UI.Importance]: #Low,
+            Value            : potentialLevel
+        },
+        {
+            $Type            : 'UI.DataField',
             Label            : '{i18n>objectCount}',
             ![@UI.Importance]: #Low,
             Value            : objectCount
+        },
+        {
+            $Type            : 'UI.DataField',
+            Label            : '{i18n>cleanupPotential}',
+            ![@UI.Importance]: #Low,
+            Value            : cleanupPotential
         },
         {
             $Type            : 'UI.DataFieldForAnnotation',
@@ -271,7 +455,7 @@ annotate service.DevClasses with @(
             Value            : score
         }
     ],
-    UI.LineItem #topPackagesByObjectCount           : [
+    UI.LineItem #topPackagesByObjectCount                : [
         {
             $Type            : 'UI.DataField',
             Label            : '{i18n>devClass}',
@@ -286,9 +470,21 @@ annotate service.DevClasses with @(
         },
         {
             $Type            : 'UI.DataField',
+            Label            : '{i18n>potentialLevel}',
+            ![@UI.Importance]: #Low,
+            Value            : potentialLevel
+        },
+        {
+            $Type            : 'UI.DataField',
             Label            : '{i18n>objectCount}',
             ![@UI.Importance]: #High,
             Value            : objectCount
+        },
+        {
+            $Type            : 'UI.DataField',
+            Label            : '{i18n>cleanupPotential}',
+            ![@UI.Importance]: #Low,
+            Value            : cleanupPotential
         },
         {
             $Type            : 'UI.DataFieldForAnnotation',
@@ -303,7 +499,51 @@ annotate service.DevClasses with @(
             Value            : score
         }
     ],
-    UI.DataPoint #AverageScore                      : {
+    UI.LineItem #topPackagesByCleanupPotential           : [
+        {
+            $Type            : 'UI.DataField',
+            Label            : '{i18n>devClass}',
+            ![@UI.Importance]: #High,
+            Value            : devClass,
+        },
+        {
+            $Type            : 'UI.DataField',
+            Label            : '{i18n>level}',
+            ![@UI.Importance]: #Low,
+            Value            : level
+        },
+        {
+            $Type            : 'UI.DataField',
+            Label            : '{i18n>potentialLevel}',
+            ![@UI.Importance]: #Low,
+            Value            : potentialLevel
+        },
+        {
+            $Type            : 'UI.DataField',
+            Label            : '{i18n>objectCount}',
+            ![@UI.Importance]: #Low,
+            Value            : objectCount
+        },
+        {
+            $Type            : 'UI.DataField',
+            Label            : '{i18n>cleanupPotential}',
+            ![@UI.Importance]: #High,
+            Value            : cleanupPotential
+        },
+        {
+            $Type            : 'UI.DataFieldForAnnotation',
+            Target           : '@UI.DataPoint#AverageScore',
+            Label            : '{i18n>averageScore}',
+            ![@UI.Importance]: #Low,
+        },
+        {
+            $Type            : 'UI.DataField',
+            Label            : '{i18n>score}',
+            ![@UI.Importance]: #Low,
+            Value            : score
+        }
+    ],
+    UI.DataPoint #AverageScore                           : {
         $Type      : 'UI.DataPointType',
         Title      : '{i18n>averageScore}',
         Value      : averageScore,
@@ -313,19 +553,77 @@ annotate service.DevClasses with @(
         }
     },
 
-    UI.PresentationVariant #topPackagesByScoreSum   : {SortOrder: [{
+    UI.PresentationVariant #topPackagesByScoreSum        : {SortOrder: [{
         Property  : score,
         Descending: true,
 
     }, ], },
-    UI.PresentationVariant #topPackagesByScoreAvg   : {SortOrder: [{
+    UI.PresentationVariant #topPackagesByScoreAvg        : {SortOrder: [{
         Property  : averageScore,
         Descending: true
     }, ]},
-    UI.PresentationVariant #topPackagesByObjectCount: {SortOrder: [{
+    UI.PresentationVariant #topPackagesByObjectCount     : {SortOrder: [{
         Property  : objectCount,
         Descending: true
     }, ]},
+    UI.PresentationVariant #topPackagesByCleanupPotential: {SortOrder: [{
+        Property  : cleanupPotential,
+        Descending: true
+    }, ]},
+    UI.Chart #cleanupPotential                           : {
+        $Type              : 'UI.ChartDefinitionType',
+        Title              : '{i18n>cleanupPotential}',
+        ChartType          : #ColumnStacked,
+        Dimensions         : [],
+        DimensionAttributes: [{
+            $Type    : 'UI.ChartDimensionAttributeType',
+            Dimension: devClass,
+            Role     : #Category
+        }],
+        Measures           : [
+            cleanupPotential,
+            potentialScore
+        ],
+        MeasureAttributes  : [
+            {
+                $Type  : 'UI.ChartMeasureAttributeType',
+                Measure: cleanupPotential,
+                Role   : #Axis1,
+            },
+            {
+                $Type  : 'UI.ChartMeasureAttributeType',
+                Measure: potentialScore,
+                Role   : #Axis1,
+            }
+        ]
+    },
+    UI.PresentationVariant #cleanupPotential             : {
+        MaxItems      : 8,
+        SortOrder     : [{
+            $Type     : 'Common.SortOrderType',
+            Property  : score,
+            Descending: true,
 
+        }],
+        Visualizations: ['@UI.Chart#cleanupPotential']
+    },
+    UI.DataPoint #cleanupPotential                       : {
+        $Type      : 'UI.DataPointType',
+        Value      : cleanupPotential,
+        Title      : '{i18n>cleanupPotential}',
+        Description: '{i18n>cleanupPotential}',
+    },
+    UI.DataPoint #potentialScore                         : {
+        $Type      : 'UI.DataPointType',
+        Value      : potentialScore,
+        Title      : '{i18n>potentialScore}',
+        Description: '{i18n>potentialScore}',
+        Criticality: #Positive
+    },
 
+    UI.Identification #cleanupPotential                  : [{
+        $Type         : 'UI.DataFieldForIntentBasedNavigation',
+        SemanticObject: 'DevelopmentObjects',
+        Action        : 'manage',
+    }, ],
 );

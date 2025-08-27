@@ -76,10 +76,19 @@
           "type": "cds.Integer",
           "@cds.persistence.name": "SCORE"
         },
+        "potentialScore": {
+          "type": "cds.Integer",
+          "@cds.persistence.name": "POTENTIALSCORE"
+        },
         "level": {
           "type": "cds.String",
           "length": 5000,
           "@cds.persistence.name": "LEVEL"
+        },
+        "potentialLevel": {
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "POTENTIALLEVEL"
         }
       },
       "@cds.persistence.name": "KERNSEIFE_DB_DEVELOPMENTOBJECTS"
@@ -597,6 +606,11 @@
           "type": "cds.String",
           "length": 5000,
           "@cds.persistence.name": "MESSAGEID"
+        },
+        "potentialMessageId": {
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "POTENTIALMESSAGEID"
         }
       },
       "@cds.persistence.name": "KERNSEIFE_DB_FINDINGRECORDS"

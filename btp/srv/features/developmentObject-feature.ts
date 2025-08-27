@@ -5,9 +5,13 @@ import {
   CleanCoreLevel
 } from '#cds-models/kernseife/db';
 import { db, entities, log, Transaction } from '@sap/cds';
-import { stringify } from 'node:querystring';
 import { text } from 'node:stream/consumers';
 import papa from 'papaparse';
+import {
+  getRatingScoreMap,
+  getSuccessorKey,
+  getSuccessorRatingMap
+} from './classification-feature';
 
 const LOG = log('DevelopmentObjectFeature');
 
@@ -126,11 +130,18 @@ export const calculateScores = async () => {
 
 const calculateScoreAndLevel = async (
   developmentObject: DevelopmentObject
-): Promise<{ score: number; level: CleanCoreLevel }> => {
+): Promise<{
+  score: number;
+  potentialScore: number;
+  level: CleanCoreLevel;
+  potentialLevel: CleanCoreLevel;
+}> => {
   const result = await SELECT.from(entities.FindingRecords)
     .columns(
       `sum(rating.score) as score`,
-      `max(rating.level) as cleanCoreLevel`
+      `sum(potentialRating.score) as potentialScore`,
+      `max(rating.level) as level`,
+      `max(potentialRating.level) as potentialLevel`
     )
     .where({
       import_ID: developmentObject.latestFindingImportId,
@@ -141,7 +152,10 @@ const calculateScoreAndLevel = async (
     .groupBy('objectType', 'objectName', 'devClass');
   return {
     score: result[0]?.score || 0,
-    level: result[0]?.cleanCoreLevel || CleanCoreLevel.A
+    potentialScore: result[0]?.potentialScore || result[0]?.score || 0,
+    level: result[0]?.level || CleanCoreLevel.A,
+    potentialLevel:
+      result[0]?.potentialLevel || result[0]?.level || CleanCoreLevel.A
   };
 };
 
@@ -178,6 +192,10 @@ export const importFinding = async (
     header: true,
     skipEmptyLines: true
   });
+
+  const successorMap = await getSuccessorRatingMap();
+  const ratingScoreMap = await getRatingScoreMap();
+
   const itemIdSet = new Set();
 
   const findingRecordList = result.data
@@ -191,7 +209,8 @@ export const importFinding = async (
       }
 
       itemIdSet.add(finding.itemId || finding.ITEMID || finding.itemID);
-      return {
+
+      const findingRecord = {
         // Map Attribues
         import_ID: findingImport.ID,
         systemId: findingImport.systemId,
@@ -209,6 +228,23 @@ export const importFinding = async (
           finding.messageid ||
           finding.MESSAGE_ID
       } as FindingRecord;
+
+      // Calculate Potential Message Id
+      // check if messageId ends with _SUC
+      if (finding.messageId.endsWith('_SUC')) {
+        // Find Successors
+        const successorKey = getSuccessorKey(
+          finding.refObjectType,
+          finding.refObjectName
+        );
+        findingRecord.potentialMessageId = successorMap.get(successorKey);
+      }
+      if (!findingRecord.potentialMessageId) {
+        // No Successor, so use the same as messageId
+        findingRecord.potentialMessageId = findingRecord.messageId;
+      }
+
+      return findingRecord;
     })
     .filter((finding) => {
       if (!finding.objectType || !finding.objectName) {
@@ -279,12 +315,17 @@ export const importFinding = async (
         namespace: ''
       } as DevelopmentObject;
 
-      const { score, level } = await calculateScoreAndLevel(developmentObject);
+      const { score, potentialScore, level, potentialLevel } =
+        await calculateScoreAndLevel(developmentObject);
+      developmentObject.potentialScore = potentialScore;
       developmentObject.score = score;
       developmentObject.level =
         level == CleanCoreLevel.A && findingRecord.messageId != '5'
           ? CleanCoreLevel.B
           : level;
+
+      developmentObject.potentialLevel = potentialLevel; // As if all findings are level A, the object could have Language Version 5
+      //TODO We might need to define the list of object types which can have Language Version 5
       developmentObject.namespace = determineNamespace(developmentObject);
 
       if (
