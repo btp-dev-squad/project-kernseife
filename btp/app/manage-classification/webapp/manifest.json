@@ -192,13 +192,19 @@
                       "enabled": true,
                       "text": "{i18n>downloadClassificationCustom}"
                     },
+                    "downloadClassificationCustomLegacy": {
+                      "press": "manageclassification.extension.controller.ClassificationController.downloadClassificationCustomLegacy",
+                      "visible": true,
+                      "enabled": true,
+                      "text": "{i18n>downloadClassificationCustomLegacy}"
+                    },
                     "downloadClassificationCloud": {
                       "press": "manageclassification.extension.controller.ClassificationController.downloadClassificationCloud",
                       "visible": false,
                       "enabled": true,
                       "text": "{i18n>downloadClassificationCloud}"
                     },
-                     "downloadClassificationGithub": {
+                    "downloadClassificationGithub": {
                       "press": "manageclassification.extension.controller.ClassificationController.downloadClassificationGithub",
                       "visible": true,
                       "enabled": true,

@@ -336,6 +336,26 @@ export default (srv: Service) => {
         req.reply(Readable.from([file]), { mimetype, filename });
         break;
       }
+      case 'classificationCustomLegacy': {
+        const mimetype = 'application/zip';
+        const filename = `classification_${dayjs().format('YYYY_MM_DD')}_legacy.zip`;
+        const classificationJson = await getClassificationJsonCustom({ legacy: true });
+        content = JSON.stringify(classificationJson);
+        content = JSON.stringify(classificationJson, null, 2);
+        // Wrap in ZIP
+        const zip = new JSZip();
+        zip.file(
+          `classification_${dayjs().format('YYYY_MM_DD')}.json`,
+          content
+        );
+        const file = await zip.generateAsync({
+          type: 'nodebuffer',
+          compression: 'DEFLATE',
+          compressionOptions: { level: 7 }
+        });
+        req.reply(Readable.from([file]), { mimetype, filename });
+        break;
+      }
       case 'classificationCloud': {
         const mimetype = 'application/zip';
         const filename = `classification_${dayjs().format('YYYY_MM_DD')}.zip`;

@@ -1,4 +1,9 @@
-import { Classification, Import, ReleaseState } from '#cds-models/kernseife/db';
+import {
+  Classification,
+  Import,
+  Ratings,
+  ReleaseState
+} from '#cds-models/kernseife/db';
 import { Transaction, connect, db, entities, log, utils } from '@sap/cds';
 import { text } from 'node:stream/consumers';
 import papa from 'papaparse';
@@ -101,9 +106,12 @@ export const getClassificationSet = async (): Promise<Set<string>> => {
   return classificationSet;
 };
 
-export const getSuccessorKey = (objectType: string, objectName: string): string  => {
+export const getSuccessorKey = (
+  objectType: string,
+  objectName: string
+): string => {
   return objectType + objectName;
-}
+};
 
 export const getSuccessorRatingMap = async (): Promise<Map<string, string>> => {
   const ratingScoreMap = await getRatingScoreMap();
@@ -350,7 +358,7 @@ export const getRatingScoreMap = async (): Promise<Map<string, number>> => {
   }, new Map<string, number>());
 };
 
-// Can't use the enum, cause CDS TS Support sucks!
+// Can't use the enum, cause CDS TS Support sucks! //TODO Revisit, guess this was fixed
 export const convertCriticalityToMessageType = (criticality) => {
   switch (criticality) {
     case 0: // Neutral
@@ -1174,10 +1182,20 @@ export const getClassificationJsonStandard = async () => {
   return classificationJson;
 };
 
-export const getClassificationJsonCustom = async () => {
-  const ratings = await SELECT.from(entities.Ratings, (r) => {
-    r.code, r.title, r.criticality_code.as('criticality'), r.score;
-  });
+export const getClassificationJsonCustom = async (
+  options: { legacy: boolean } = { legacy: false }
+) => {
+  let ratings: Ratings = [];
+  if (options.legacy) {
+    ratings = await SELECT.from(entities.Ratings, (r) => {
+      r.code, r.title, r.criticality_code.as('criticality'), r.score;
+    }).where({ usableInClassification: true });
+  } else {
+    ratings = await SELECT.from(entities.Ratings, (r) => {
+      r.code, r.title, r.criticality_code.as('criticality'), r.score;
+    });
+  }
+
   const classifications = await SELECT.from(entities.Classifications, (c) => {
     c.tadirObjectType,
       c.tadirObjectName,
@@ -1300,7 +1318,6 @@ const getRatingMap = async (): Promise<Map<string, string>> => {
     return map;
   }, new Map<string, string>());
 };
-
 
 const assignFramework = async (
   classification: Classification,

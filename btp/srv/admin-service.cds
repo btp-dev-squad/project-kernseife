@@ -156,22 +156,28 @@ service AdminService @(requires: 'admin') {
         @(Core.MediaType                 : 'application/json')
         @Core.ContentDisposition.Filename: 'classificationStandard.json'
         @Core.ContentDisposition.Type    : 'inline'
-        classificationStandard : LargeBinary;
+        classificationStandard     : LargeBinary;
 
         @(Core.MediaType                 : 'application/json')
         @Core.ContentDisposition.Filename: 'classificationCustom.json'
         @Core.ContentDisposition.Type    : 'inline'
-        classificationCustom   : LargeBinary;
+        classificationCustom       : LargeBinary;
+
+
+        @(Core.MediaType                 : 'application/json')
+        @Core.ContentDisposition.Filename: 'classificationCustomLegacy.json'
+        @Core.ContentDisposition.Type    : 'inline'
+        classificationCustomLegacy : LargeBinary;
 
         @(Core.MediaType                 : 'application/json')
         @Core.ContentDisposition.Filename: 'classificationCloud.json'
         @Core.ContentDisposition.Type    : 'inline'
-        classificationCloud    : LargeBinary;
+        classificationCloud        : LargeBinary;
 
         @(Core.MediaType                 : 'application/zip')
         @Core.ContentDisposition.Filename: 'classification.zip'
         @Core.ContentDisposition.Type    : 'inline'
-        classificationGithub   : LargeBinary;
+        classificationGithub       : LargeBinary;
     }
 
 
@@ -206,6 +212,8 @@ service AdminService @(requires: 'admin') {
     @cds.redirection.target: false
     define view RatingsValueList as
         select from db.Ratings
+        where
+            usableInClassification == true
         order by
             score desc,
             code  asc;

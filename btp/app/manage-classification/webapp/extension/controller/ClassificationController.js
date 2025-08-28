@@ -1,34 +1,34 @@
 sap.ui.define(
   [
-    "sap/m/MessageBox",
-    "sap/m/MessageToast",
-    "sap/ui/unified/FileUploaderParameter",
+    'sap/m/MessageBox',
+    'sap/m/MessageToast',
+    'sap/ui/unified/FileUploaderParameter'
   ],
   function (MessageBox, MessageToast, FileUploaderParameter) {
-    "use strict";
+    'use strict';
 
     const _createUploadController = function (oExtensionAPI, oUploadType) {
       let oUploadDialog;
 
       const setOkButtonEnabled = function (bOk) {
         oUploadDialog && oUploadDialog.getBeginButton().setEnabled(bOk);
-      }
+      };
 
       const setDialogBusy = function (bBusy) {
         oUploadDialog.setBusy(bBusy);
-      }
+      };
 
       const closeDialog = function () {
         oUploadDialog && oUploadDialog.close();
-      }
+      };
 
       const showError = function (sMessage) {
-        MessageBox.error(sMessage || "Upload failed");
-      }
+        MessageBox.error(sMessage || 'Upload failed');
+      };
 
       const byId = function (sId) {
-        return sap.ui.core.Fragment.byId("uploadDialog", sId);
-      }
+        return sap.ui.core.Fragment.byId('uploadDialog', sId);
+      };
 
       return {
         onBeforeOpen: function (oEvent) {
@@ -45,27 +45,28 @@ sap.ui.define(
         onOk: function (oEvent) {
           setDialogBusy(true);
 
-          const oFileUploader = byId("uploader");
+          const oFileUploader = byId('uploader');
 
-          const serviceUrl = oExtensionAPI.getModel().getServiceUrl() + "FileUpload/file";
+          const serviceUrl =
+            oExtensionAPI.getModel().getServiceUrl() + 'FileUpload/file';
 
           oFileUploader.setUploadUrl(serviceUrl);
           oFileUploader.destroyHeaderParameters();
 
           const xCrsrfToken = new FileUploaderParameter();
-          xCrsrfToken.setName("X-CSRF-Token");
+          xCrsrfToken.setName('X-CSRF-Token');
           xCrsrfToken.setValue(
-            oExtensionAPI.getModel().getHttpHeaders()["X-CSRF-Token"]
+            oExtensionAPI.getModel().getHttpHeaders()['X-CSRF-Token']
           );
           oFileUploader.addHeaderParameter(xCrsrfToken);
 
           const uploadType = new FileUploaderParameter();
-          uploadType.setName("X-Upload-Type");
+          uploadType.setName('X-Upload-Type');
           uploadType.setValue(oUploadType);
           oFileUploader.addHeaderParameter(uploadType);
 
           const fileName = new FileUploaderParameter();
-          fileName.setName("X-File-Name");
+          fileName.setName('X-File-Name');
           fileName.setValue(oFileUploader.getValue());
           oFileUploader.addHeaderParameter(fileName);
 
@@ -75,7 +76,7 @@ sap.ui.define(
               oFileUploader.upload();
             })
             .catch(function (error) {
-              showError("The file cannot be read.");
+              showError('The file cannot be read.');
               setDialogBusy(false);
             });
         },
@@ -89,15 +90,15 @@ sap.ui.define(
             .getSource()
             .getFileType()
             .map(function (sFileType) {
-              return "*." + sFileType;
+              return '*.' + sFileType;
             })
-            .join(", ");
+            .join(', ');
 
           showError(
-            "The file type *." +
-            oEvent.getParameter("fileType") +
-            " is not supported. Choose one of the following types: " +
-            sSupportedFileTypes
+            'The file type *.' +
+              oEvent.getParameter('fileType') +
+              ' is not supported. Choose one of the following types: ' +
+              sSupportedFileTypes
           );
         },
 
@@ -110,7 +111,7 @@ sap.ui.define(
         },
 
         onUploadComplete: function (oEvent) {
-          const iStatus = oEvent.getParameter("status");
+          const iStatus = oEvent.getParameter('status');
           const oFileUploader = oEvent.getSource();
 
           oFileUploader.clear();
@@ -118,46 +119,52 @@ sap.ui.define(
           setDialogBusy(false);
 
           if (iStatus >= 400) {
-            const oRawResponse = JSON.parse(oEvent.getParameter("responseRaw"));
+            const oRawResponse = JSON.parse(oEvent.getParameter('responseRaw'));
             showError(
               oRawResponse && oRawResponse.error && oRawResponse.error.message
             );
           } else {
-            MessageToast.show("Uploaded successfully");
+            MessageToast.show('Uploaded successfully');
             oExtensionAPI.refresh();
             closeDialog();
           }
-        },
+        }
       };
-    }
+    };
 
     return {
       showUploadClassificationDialog: function () {
         this.loadFragment({
-          id: "uploadDialog",
-          name: "manageclassification.extension.fragment.UploadClassificationsDialog",
-          controller: _createUploadController(this, "Classifications"),
+          id: 'uploadDialog',
+          name: 'manageclassification.extension.fragment.UploadClassificationsDialog',
+          controller: _createUploadController(this, 'Classifications')
         }).then(function (oDialog) {
           oDialog.open();
         });
       },
       downloadClassificationStandard: function () {
         const serviceUrl = this.getModel().getServiceUrl();
-        window.open(serviceUrl + "Downloads/classificationStandard", "_blank")
+        window.open(serviceUrl + 'Downloads/classificationStandard', '_blank');
       },
       downloadClassificationCustom: function () {
         const serviceUrl = this.getModel().getServiceUrl();
-        window.open(serviceUrl + "Downloads/classificationCustom", "_blank")
+        window.open(serviceUrl + 'Downloads/classificationCustom', '_blank');
+      },
+      downloadClassificationCustomLegacy: function () {
+        const serviceUrl = this.getModel().getServiceUrl();
+        window.open(
+          serviceUrl + 'Downloads/classificationCustomLegacy',
+          '_blank'
+        );
       },
       downloadClassificationCloud: function () {
         const serviceUrl = this.getModel().getServiceUrl();
-        window.open(serviceUrl + "Downloads/classificationCloud", "_blank")
+        window.open(serviceUrl + 'Downloads/classificationCloud', '_blank');
       },
       downloadClassificationGithub: function () {
         const serviceUrl = this.getModel().getServiceUrl();
-        window.open(serviceUrl + "Downloads/classificationGithub", "_blank")
-      },
-      
+        window.open(serviceUrl + 'Downloads/classificationGithub', '_blank');
+      }
     };
   }
 );
