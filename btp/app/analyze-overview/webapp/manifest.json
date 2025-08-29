@@ -155,6 +155,31 @@
           }
         }
       },
+       "scoreShare": {
+        "model": "mainModel",
+        "template": "sap.ovp.cards.v4.charts.analytical",
+        "settings": {
+          "title": "{{scoreShare}}",
+          "subTitle": "{{scoreShareSubTitle}}",
+          "entitySet": "DevelopmentObjects",
+          "valueSelectionInfo": "{{scoreShareValueSelectionInfo}}",
+          "identificationAnnotationPath": "com.sap.vocabularies.UI.v1.Identification#scoreShare",
+          "presentationAnnotationPath": "com.sap.vocabularies.UI.v1.PresentationVariant#scoreShare",
+          "chartAnnotationPath": "com.sap.vocabularies.UI.v1.Chart#scoreShare",
+          "chartProperties": {
+            "plotArea": {
+              "dataLabel": {
+                "type": "percentage"
+              }
+            }
+          },
+          "bEnableStableColors": true,
+          "defaultSpan": {
+            "rows": 1,
+            "cols": 1
+          }
+        }
+      },
       "levelShare": {
         "model": "mainModel",
         "template": "sap.ovp.cards.v4.charts.analytical",
@@ -180,17 +205,17 @@
           }
         }
       },
-      "scoreShare": {
+      "potentialLevelShare": {
         "model": "mainModel",
         "template": "sap.ovp.cards.v4.charts.analytical",
         "settings": {
-          "title": "{{scoreShare}}",
-          "subTitle": "{{scoreShareSubTitle}}",
+          "title": "{{potentialLevelShare}}",
+          "subTitle": "{{potentialLevelShareSubTitle}}",
           "entitySet": "DevelopmentObjects",
-          "valueSelectionInfo": "{{scoreShareValueSelectionInfo}}",
-          "identificationAnnotationPath": "com.sap.vocabularies.UI.v1.Identification#scoreShare",
-          "presentationAnnotationPath": "com.sap.vocabularies.UI.v1.PresentationVariant#scoreShare",
-          "chartAnnotationPath": "com.sap.vocabularies.UI.v1.Chart#scoreShare",
+          "valueSelectionInfo": "{{potentialLevelShareValueSelectionInfo}}",
+          "identificationAnnotationPath": "com.sap.vocabularies.UI.v1.Identification#potentialLevelShare",
+          "presentationAnnotationPath": "com.sap.vocabularies.UI.v1.PresentationVariant#potentialLevelShare",
+          "chartAnnotationPath": "com.sap.vocabularies.UI.v1.Chart#potentialLevelShare",
           "chartProperties": {
             "plotArea": {
               "dataLabel": {

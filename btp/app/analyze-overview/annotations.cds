@@ -32,20 +32,52 @@ annotate service.DevelopmentObjects with @(
         Value: objectCount,
         Title: '{i18n>languageVersionShare}',
     },
-
     UI.Identification #languageVersionShare                           : [{
         $Type         : 'UI.DataFieldForIntentBasedNavigation',
         SemanticObject: 'DevelopmentObjects',
         Action        : 'manage',
     }, ],
+    UI.Chart #scoreShare                                              : {
+        $Type              : 'UI.ChartDefinitionType',
+        Title              : '{i18n>scoreShare}',
+        ChartType          : #Donut,
+        Dimensions         : [level],
+        DimensionAttributes: [{
+            $Type    : 'UI.ChartDimensionAttributeType',
+            Dimension: level,
+            Role     : #Category
+        }],
+        Measures           : [score],
+        MeasureAttributes  : [{
+            $Type  : 'UI.ChartMeasureAttributeType',
+            Measure: score,
+            Role   : #Axis1
+        }]
+    },
+    UI.PresentationVariant #scoreShare                                : {
+        SortOrder     : [{
+            $Type     : 'Common.SortOrderType',
+            Property  : level,
+            Descending: false,
 
-
+        }],
+        Visualizations: ['@UI.Chart#scoreShare']
+    },
+    UI.DataPoint #scoreShare                                          : {
+        $Type: 'UI.DataPointType',
+        Value: score,
+        Title: '{i18n>scoreShare}',
+    },
+    UI.Identification #scoreShare                                     : [{
+        $Type         : 'UI.DataFieldForIntentBasedNavigation',
+        SemanticObject: 'DevelopmentObjects',
+        Action        : 'manage',
+    }, ],
     UI.Chart #levelShare                                              : {
         $Type              : 'UI.ChartDefinitionType',
         Title              : '{i18n>levelShare}',
         ChartType          : #Donut,
         Dimensions         : [level],
-
         DimensionAttributes: [{
             $Type    : 'UI.ChartDimensionAttributeType',
             Dimension: level,
@@ -70,57 +102,52 @@ annotate service.DevelopmentObjects with @(
     UI.DataPoint #levelShare                                          : {
         $Type: 'UI.DataPointType',
         Value: objectCount,
-        Title: '{i18n>levelShare }',
+        Title: '{i18n>levelShare}',
 
     },
-
     UI.Identification #levelShare                                     : [{
         $Type         : 'UI.DataFieldForIntentBasedNavigation',
         SemanticObject: 'DevelopmentObjects',
         Action        : 'manage',
-    }, ]
-
-    ,
-    UI.Chart #scoreShare                                              : {
+    }, ],
+    UI.Chart #potentialLevelShare                                     : {
         $Type              : 'UI.ChartDefinitionType',
-        Title              : '{i18n>scoreShare}',
+        Title              : '{i18n>potentialLevelShare}',
         ChartType          : #Donut,
-        Dimensions         : [level],
-
+        Dimensions         : [potentialLevel],
         DimensionAttributes: [{
             $Type    : 'UI.ChartDimensionAttributeType',
-            Dimension: level,
+            Dimension: potentialLevel,
             Role     : #Category
         }],
         Measures           : [objectCount],
         MeasureAttributes  : [{
             $Type  : 'UI.ChartMeasureAttributeType',
-            Measure: score,
-            Role   : #Axis1
+            Measure: objectCount,
+            Role   : #Axis1,
         }]
     },
-    UI.PresentationVariant #scoreShare                                : {
+    UI.PresentationVariant #potentialLevelShare                       : {
         SortOrder     : [{
             $Type     : 'Common.SortOrderType',
-            Property  : level,
+            Property  : potentialLevel,
             Descending: false,
 
         }],
-        Visualizations: ['@UI.Chart#levelShare']
+        Visualizations: ['@UI.Chart#potentialLevelShare']
     },
-    UI.DataPoint #scoreShare                                          : {
+    UI.DataPoint #potentialLevelShare                                 : {
         $Type: 'UI.DataPointType',
-        Value: score,
-        Title: '{i18n>scoreShare}',
+        Value: objectcount,
+        Title: '{i18n>potentialLevelShare}',
 
     },
-
-    UI.Identification #scoreShare                                     : [{
+    UI.Identification #potentialLevelShare                            : [{
         $Type         : 'UI.DataFieldForIntentBasedNavigation',
         SemanticObject: 'DevelopmentObjects',
         Action        : 'manage',
     }, ],
-    UI.LineItem #topDevelopmentObjectsByScore                                : [
+    UI.LineItem #topDevelopmentObjectsByScore                         : [
         {
             $Type            : 'UI.DataField',
             Label            : '{i18n>objectType}',
@@ -159,7 +186,7 @@ annotate service.DevelopmentObjects with @(
             ![@UI.Importance]: #Low,
         },
     ],
-    UI.LineItem #topDevelopmentObjectsByCleanupPotentialAbs                                : [
+    UI.LineItem #topDevelopmentObjectsByCleanupPotentialAbs           : [
         {
             $Type            : 'UI.DataField',
             Label            : '{i18n>objectType}',
@@ -198,7 +225,7 @@ annotate service.DevelopmentObjects with @(
             ![@UI.Importance]: #Low,
         },
     ],
-     UI.LineItem #topDevelopmentObjectsByCleanupPotentialRel                                : [
+    UI.LineItem #topDevelopmentObjectsByCleanupPotentialRel           : [
         {
             $Type            : 'UI.DataField',
             Label            : '{i18n>objectType}',
@@ -237,7 +264,7 @@ annotate service.DevelopmentObjects with @(
             ![@UI.Importance]: #Low,
         },
     ],
-    UI.DataPoint #CleanupPotentialPercent                             : {
+    UI.DataPoint #cleanupPotentialPercent                             : {
         $Type      : 'UI.DataPointType',
         Title      : '{i18n>CleanupPotentialPercent}',
         Value      : cleanupPotentialPercent,
@@ -324,7 +351,6 @@ annotate service.Classifications with @(
         Title              : '{i18n>ratingShare}',
         ChartType          : #Column,
         Dimensions         : [rating_code],
-
         DimensionAttributes: [{
             $Type    : 'UI.ChartDimensionAttributeType',
             Dimension: rating_code,
