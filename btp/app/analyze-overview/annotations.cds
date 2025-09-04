@@ -181,7 +181,7 @@ annotate service.DevelopmentObjects with @(
         },
         {
             $Type            : 'UI.DataFieldForAnnotation',
-            Target           : '@UI.DataPoint#CleanupPotentialPercent',
+            Target           : '@UI.DataPoint#cleanupPotentialPercent',
             Label            : '{i18n>cleanupPotentialPercent}',
             ![@UI.Importance]: #Low,
         },
@@ -220,7 +220,7 @@ annotate service.DevelopmentObjects with @(
         },
         {
             $Type            : 'UI.DataFieldForAnnotation',
-            Target           : '@UI.DataPoint#CleanupPotentialPercent',
+            Target           : '@UI.DataPoint#cleanupPotentialPercent',
             Label            : '{i18n>cleanupPotentialPercent}',
             ![@UI.Importance]: #Low,
         },
@@ -259,7 +259,7 @@ annotate service.DevelopmentObjects with @(
         },
         {
             $Type            : 'UI.DataFieldForAnnotation',
-            Target           : '@UI.DataPoint#CleanupPotentialPercent',
+            Target           : '@UI.DataPoint#cleanupPotentialPercent',
             Label            : '{i18n>cleanupPotentialPercent}',
             ![@UI.Importance]: #Low,
         },

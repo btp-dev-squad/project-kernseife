@@ -123,16 +123,16 @@ entity DevelopmentObjects : managed {
         potentialScore          : Integer;
         level                   : CleanCoreLevel;
         potentialLevel          : CleanCoreLevel;
-        cleanupPotential        : Integer       = score - potentialScore;
+        cleanupPotential        : Integer       = score - potentialScore stored;
         @Common.Label                   : '{i18n>cleanupPotentialPercent}'
         @Measures.Unit                  : '%'
-        cleanupPotentialPercent : Decimal(8, 2) = score > 0 ? (
+        cleanupPotentialPercent : Decimal(8, 2) = (score > 0) ? (
             100.0 - (
                 (
                     100.0 / score
                 ) * potentialScore
             )
-        ) : 0
+        ) : 0 stored
 
 }
 

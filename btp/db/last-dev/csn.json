@@ -89,6 +89,105 @@
           "type": "cds.String",
           "length": 5000,
           "@cds.persistence.name": "POTENTIALLEVEL"
+        },
+        "cleanupPotential": {
+          "@Core.Computed": true,
+          "type": "cds.Integer",
+          "value": {
+            "stored": true,
+            "xpr": [
+              [
+                {
+                  "ref": [
+                    "score"
+                  ]
+                },
+                "-",
+                {
+                  "ref": [
+                    "potentialScore"
+                  ]
+                }
+              ]
+            ]
+          },
+          "@cds.persistence.name": "CLEANUPPOTENTIAL"
+        },
+        "cleanupPotentialPercent": {
+          "@Core.Computed": true,
+          "type": "cds.Decimal",
+          "precision": 8,
+          "scale": 2,
+          "value": {
+            "stored": true,
+            "xpr": [
+              [
+                "case",
+                "when",
+                {
+                  "xpr": [
+                    [
+                      {
+                        "ref": [
+                          "score"
+                        ]
+                      },
+                      ">",
+                      {
+                        "val": 0
+                      }
+                    ]
+                  ]
+                },
+                "then",
+                {
+                  "xpr": [
+                    [
+                      {
+                        "val": "100.0",
+                        "literal": "number"
+                      },
+                      "-",
+                      {
+                        "xpr": [
+                          [
+                            {
+                              "xpr": [
+                                [
+                                  {
+                                    "val": "100.0",
+                                    "literal": "number"
+                                  },
+                                  "/",
+                                  {
+                                    "ref": [
+                                      "score"
+                                    ]
+                                  }
+                                ]
+                              ]
+                            },
+                            "*",
+                            {
+                              "ref": [
+                                "potentialScore"
+                              ]
+                            }
+                          ]
+                        ]
+                      }
+                    ]
+                  ]
+                },
+                "else",
+                {
+                  "val": 0
+                },
+                "end"
+              ]
+            ]
+          },
+          "@cds.persistence.name": "CLEANUPPOTENTIALPERCENT"
         }
       },
       "@cds.persistence.name": "KERNSEIFE_DB_DEVELOPMENTOBJECTS"
@@ -1302,7 +1401,7 @@
     "creator": "CDS Compiler v6.0.12",
     "flavor": "inferred",
     "minified": true,
-    "build": "CDS Build v9.0.3"
+    "build": "CDS Build v9.2.1"
   },
   "$version": "2.0"
 }
