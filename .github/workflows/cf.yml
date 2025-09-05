@@ -39,11 +39,8 @@ jobs:
           cf-username: ${{ vars.CF_USERNAME }}
           cf-password: ${{ secrets.CF_PASSWORD }}
       - run: cd btp
-      - run: npm add -D @sap/cds-dk
-      - run: npx cds add hana
       - run: npm install
-      - run: npm run mbt
-      - run: npm run deploy-dev
+      - run: npx cds up
 
       - uses: ./.github/actions/github-deploy
         with:
