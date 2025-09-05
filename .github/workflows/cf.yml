@@ -26,6 +26,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment || 'Staging' }}
+    defaults:
+      run:
+        working-directory: ./btp
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v4
@@ -38,7 +41,7 @@ jobs:
           cf-space: ${{ vars.CF_SPACE }}
           cf-username: ${{ vars.CF_USERNAME }}
           cf-password: ${{ secrets.CF_PASSWORD }}
-      - run: cd btp
+
       - run: npm install
       - run: npx cds up
 
