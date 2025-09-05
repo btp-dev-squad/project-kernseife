@@ -44,7 +44,8 @@ jobs:
       - run: npm add -D @sap/cds-dk
       - run: npx cds add hana
       - run: npm install
-      - run: npx cds up
+      - run: npm run mbt
+      - run: npm run deploy-dev
 
       - uses: ./.github/actions/github-deploy
         with:

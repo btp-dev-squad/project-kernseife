@@ -16,7 +16,7 @@ jobs:
 
   deploy-cf:
     # needs: [tests]
-    uses: capire/bookshop/.github/workflows/cf.yml@main
+    uses: .github/workflows/cf.yml@main
     secrets: inherit
     with:
       environment: Production

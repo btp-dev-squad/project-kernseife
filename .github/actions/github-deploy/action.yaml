@@ -16,7 +16,7 @@ runs:
       id: get-url
       shell: bash
       run: |
-        raw=$(cf app "${{ inputs.app-name }}" | awk '/routes:/ {print $2}')
+        raw=$(cf app "${{ inputs.app-name }}-srv" | awk '/routes:/ {print $2}')
         raw=$(echo "$raw" | sed -E 's#^https?://##')
         echo "url=https://$raw" >> "$GITHUB_OUTPUT"
 
