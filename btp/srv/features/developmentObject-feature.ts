@@ -194,7 +194,6 @@ export const importFinding = async (
   });
 
   const successorMap = await getSuccessorRatingMap();
-  const ratingScoreMap = await getRatingScoreMap();
 
   const itemIdSet = new Set();
 
@@ -231,7 +230,11 @@ export const importFinding = async (
 
       // Calculate Potential Message Id
       // check if messageId ends with _SUC
-      if (finding.messageId.endsWith('_SUC')) {
+      if(!findingRecord.messageId){
+        LOG.error('Missing MessageId', { finding, findingRecord });
+      }
+
+      if (findingRecord.messageId!.endsWith('_SUC')) {
         // Find Successors
         const successorKey = getSuccessorKey(
           finding.refObjectType,
