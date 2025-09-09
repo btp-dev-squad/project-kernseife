@@ -8,10 +8,10 @@ import { db, entities, log, Transaction } from '@sap/cds';
 import { text } from 'node:stream/consumers';
 import papa from 'papaparse';
 import {
-  getRatingScoreMap,
   getSuccessorKey,
   getSuccessorRatingMap
 } from './classification-feature';
+import { supportslanguageVersions } from '../lib/languageVersions';
 
 const LOG = log('DevelopmentObjectFeature');
 
@@ -230,7 +230,7 @@ export const importFinding = async (
 
       // Calculate Potential Message Id
       // check if messageId ends with _SUC
-      if(!findingRecord.messageId){
+      if (!findingRecord.messageId) {
         LOG.error('Missing MessageId', { finding, findingRecord });
       }
 
@@ -322,12 +322,21 @@ export const importFinding = async (
         await calculateScoreAndLevel(developmentObject);
       developmentObject.potentialScore = potentialScore;
       developmentObject.score = score;
+
       developmentObject.level =
-        level == CleanCoreLevel.A && findingRecord.messageId != '5'
+        level == CleanCoreLevel.A &&
+        findingRecord.messageId != '5' &&
+        findingRecord.messageId != '2' // Key-User is also Part of ABAP Cloud => Level A as well
           ? CleanCoreLevel.B
           : level;
 
-      developmentObject.potentialLevel = potentialLevel; // As if all findings are level A, the object could have Language Version 5
+      const supportsABAPCloud = supportslanguageVersions(
+        developmentObject.objectType!
+      );
+      developmentObject.potentialLevel =
+        !supportsABAPCloud && potentialLevel == CleanCoreLevel.A
+          ? CleanCoreLevel.B
+          : potentialLevel; // As if all findings are level A, the object could have Language Version 5
       //TODO We might need to define the list of object types which can have Language Version 5
       developmentObject.namespace = determineNamespace(developmentObject);
 

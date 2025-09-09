@@ -9,6 +9,7 @@ service AnalyticsService @(requires: [
     @readonly
     entity DevelopmentObjects            as
         select from db.DevelopmentObjects {
+            @Common.ValueListWithFixedValues: false
             objectType,
             objectName,
             devClass,
@@ -30,7 +31,7 @@ service AnalyticsService @(requires: [
             @Common.Label     : '{i18n>stableScore}'
             @Analytics.Measure: true  @Aggregation.default: #SUM
             potentialScore          : Integer,
-            @Common.Label: '{i18n>potentialLevel}'
+            @Common.Label                   : '{i18n>potentialLevel}'
             potentialLevel          : String,
             cleanupPotentialPercent : Decimal(8, 2),
             level,
