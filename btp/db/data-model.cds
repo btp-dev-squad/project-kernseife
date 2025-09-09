@@ -124,9 +124,12 @@ entity DevelopmentObjects : managed {
         level                   : CleanCoreLevel;
         potentialLevel          : CleanCoreLevel;
         cleanupPotential        : Integer       = score - potentialScore stored;
+
         @Common.Label                   : '{i18n>cleanupPotentialPercent}'
         @Measures.Unit                  : '%'
-        cleanupPotentialPercent : Decimal(8, 2) = (score > 0) ? (
+        cleanupPotentialPercent : Decimal(8, 2) = (
+            score > 0
+        ) ? (
             100.0 - (
                 (
                     100.0 / score
@@ -564,9 +567,13 @@ entity ObjectTypes {
 }
 
 define view ObjectTypeValueList as
-    select from Classifications distinct {
-        key objectType
-    };
+        select from Classifications distinct {
+            key objectType
+        }
+    union
+        select from DevelopmentObjects distinct {
+            key objectType
+        };
 
 define view ObjectSubTypeValueList as
     select from Classifications distinct {

@@ -16,7 +16,7 @@ service AnalyticsService @(requires: [
             extension_ID,
             IFNULL(
                 extension.title, 'Unassigned'
-            )                      as extension        : String,
+            ) as extension          : String,
             languageVersion,
             languageVersion_code,
             findingListAggregated,
@@ -29,13 +29,13 @@ service AnalyticsService @(requires: [
             cleanupPotential,
             @Common.Label     : '{i18n>stableScore}'
             @Analytics.Measure: true  @Aggregation.default: #SUM
-            potentialScore                             : Integer,
+            potentialScore          : Integer,
             @Common.Label: '{i18n>potentialLevel}'
-            potentialLevel                             : String,
-            cleanupPotentialPercent                    : Decimal(8, 2),
+            potentialLevel          : String,
+            cleanupPotentialPercent : Decimal(8, 2),
             level,
             @Analytics.Measure: true  @Aggregation.default: #SUM
-            1                      as objectCount      : Integer
+            1 as objectCount        : Integer
         }
         where
             latestFindingImportId != '';
@@ -166,4 +166,8 @@ service AnalyticsService @(requires: [
 
     @readonly
     entity DevelopmentObjectsAggregated  as projection on db.DevelopmentObjectsAggregated;
+
+    @readonly
+    @cds.redirection.target: false
+    entity ObjectTypeValueList           as projection on db.ObjectTypeValueList;
 }
