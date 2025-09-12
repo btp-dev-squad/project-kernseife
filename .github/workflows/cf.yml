@@ -9,7 +9,12 @@ on:
         default: Staging
         type: string
   workflow_dispatch:
-  pull_request:
+    inputs:
+      environment:
+        description: 'Deployment environment name'
+        required: false
+        default: Staging
+        type: string
   
 
 permissions:
