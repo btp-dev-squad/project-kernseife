@@ -14,12 +14,12 @@ DATA:
   scsr_obj_type         TYPE string,
   scsr_obj_key          TYPE string,
   trac_cons             TYPE abap_bool,
-  data_files            TYPE TABLE OF cl_ycm_cc_cache_write_api=>ty_api_file,
-  data_files_full_names TYPE TABLE OF cl_ycm_cc_cache_write_api=>ty_api_file,
+  data_files            TYPE TABLE OF zknsf_cl_cache_write_api=>ty_api_file,
+  data_files_full_names TYPE TABLE OF zknsf_cl_cache_write_api=>ty_api_file,
   selected_row          TYPE lvc_t_row,
   selected_row_api      TYPE lvc_t_row,
-  selected_file         TYPE cl_ycm_cc_cache_write_api=>ty_api_file,
-  selected_api          TYPE cl_ycm_cc_cache_write_api=>ty_api.
+  selected_file         TYPE zknsf_cl_cache_write_api=>ty_api_file,
+  selected_api          TYPE zknsf_cl_cache_write_api=>ty_api.
 
 
 DATA(class_program) = NEW zknsf_cl_classification_mangr( ).
@@ -31,12 +31,12 @@ CLASS classification_manager DEFINITION FINAL.
       columns        TYPE lvc_t_fcat,
       api_columns    TYPE lvc_t_fcat,
       scsr_columns   TYPE lvc_t_fcat,
-      api_data_files TYPE TABLE OF cl_ycm_cc_cache_write_api=>ty_api.
+      api_data_files TYPE TABLE OF zknsf_cl_cache_write_api=>ty_api.
 
     METHODS: constructor,
       display_main_alv,
       display_detail_alv,
-      get_apis RETURNING VALUE(result) TYPE cl_ycm_cc_cache_write_api=>apis,
+      get_apis RETURNING VALUE(result) TYPE zknsf_cl_cache_write_api=>apis,
       user_command_in_file_overview IMPORTING ucomm TYPE sy-ucomm,
       user_command_in_api_overview IMPORTING api_ucomm TYPE sy-ucomm
                                    RAISING   cx_ycm_cc_provider_error,
@@ -48,7 +48,7 @@ CLASS classification_manager DEFINITION FINAL.
 
     METHODS get_successors
       RETURNING
-        VALUE(result) TYPE cl_ycm_cc_cache_write_api=>successors.
+        VALUE(result) TYPE zknsf_cl_cache_write_api=>successors.
     METHODS export_json
       IMPORTING
         file_name       TYPE string

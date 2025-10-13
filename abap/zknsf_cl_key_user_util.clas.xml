@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>ZKNSF_CL_KEY_USER_UTIL</CLSNAME>
+    <LANGU>E</LANGU>
+    <DESCRIPT>Kernseife: Key-User Detectory</DESCRIPT>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+   </VSEOCLASS>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CMPNAME>INSTANCE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Kernseife: Key-User Detectory</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
+   <DESCRIPTIONS_SUB>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_INSTANCE</CMPNAME>
+     <SCONAME>INST</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Kernseife: Key-User Detectory</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>IS_CDS_GENERATED</CMPNAME>
+     <SCONAME>IS_CDS_GENERATED</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Truth Value: True/False</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>IS_CDS_GENERATED</CMPNAME>
+     <SCONAME>OBJECT_NAME</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Object Name in Object Directory</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>IS_CDS_GENERATED</CMPNAME>
+     <SCONAME>OBJECT_TYPE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Object Type in Object Directory</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>IS_KEY_USER_GENERATED</CMPNAME>
+     <SCONAME>IS_KEY_USER_GENERATED</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Truth Value: True/False</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>IS_KEY_USER_GENERATED</CMPNAME>
+     <SCONAME>OBJECT_NAME</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Object Name in Object Directory</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>IS_KEY_USER_GENERATED</CMPNAME>
+     <SCONAME>OBJECT_TYPE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Object Type in Object Directory</DESCRIPT>
+    </SEOSUBCOTX>
+   </DESCRIPTIONS_SUB>
+  </asx:values>
+ </asx:abap>
+</abapGit>

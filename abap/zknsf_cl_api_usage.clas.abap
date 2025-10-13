@@ -62,16 +62,16 @@ CLASS zknsf_cl_api_usage DEFINITION
         REDEFINITION .
     METHODS inform_atc
         REDEFINITION .
-  PRIVATE SECTION.
-    DATA: usage_preprocessor TYPE REF TO zknsf_cl_usage_preprocessor.
-    DATA:
-      sw_component_list TYPE SORTED TABLE OF dlvunit WITH UNIQUE DEFAULT KEY .
-    DATA track_language_version_attr TYPE abap_boolean .
+private section.
+
+  data:
+    sw_component_list TYPE SORTED TABLE OF dlvunit WITH UNIQUE DEFAULT KEY .
+  data TRACK_LANGUAGE_VERSION_ATTR type ABAP_BOOLEAN .
 ENDCLASS.
 
 
 
-CLASS zknsf_cl_api_usage IMPLEMENTATION.
+CLASS ZKNSF_CL_API_USAGE IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -315,9 +315,9 @@ CLASS zknsf_cl_api_usage IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-
+    " This is only supported in none-remote setups!
     IF language_version = if_abap_language_version=>gc_version-standard_source_code
-    AND usage_preprocessor->is_key_user_generated( object_type = object_type object_name = object_name ) = abap_true.
+    AND zknsf_cl_key_user_util=>get_instance( )->is_key_user_generated( object_type = object_type object_name = object_name ) = abap_true.
       code = if_abap_language_version=>gc_version-key_user.
     ENDIF.
 
@@ -388,9 +388,6 @@ CLASS zknsf_cl_api_usage IMPLEMENTATION.
 
 
   METHOD get_usage_preprocessor.
-    IF usage_preprocessor IS INITIAL.
-      usage_preprocessor = NEW zknsf_cl_usage_preprocessor( rfc_destination ).
-    ENDIF.
-    RETURN usage_preprocessor.
+    RETURN NEW zknsf_cl_usage_preprocessor( rfc_destination ).
   ENDMETHOD.
 ENDCLASS.
