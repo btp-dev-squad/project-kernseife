@@ -2,12 +2,21 @@
 
 > [!CAUTION]  
 > As this check is based on the "Usage of APIs" Check, it is necessary to have [SAP Note 3565942](https://me.sap.com/notes/3565942) implemented in your system.
-> The current Version of Kernseife (v1.3.2) is tested with *v19* of the note.
+> The current Version of Kernseife (v1.3.4) is tested with *v19* of the note.
 > Lower Versions of the Note will only work with lower versions of Kernseife, but it is always recommended to use the latest version of both.
+> 
+>As we don't have multiple Development/Test S/4 Systems, we are unfortunatly not able to check if this Version of Kernseife works with 
+>older versions of the ATC Note and without some other Notes.
+>In case you find any dependencies or incompatibilities, please open an issue and we will help you figure things out.
+>As we revamped the Upload Report, [SAP Note 3630552](https://me.sap.com/notes/3630552) is now also **mandatory**.
+>
+>In general SAP has released a new [SAP Note 3627152](https://me.sap.com/notes/3627152) which helps you identify SAP Notes which are related to 
+>Clean Core and should be implemented in your system in case you want to actually start your Clean Core Journey.
 
 ## Prerequisits
 * ABAP Test Cockpit (ATC) on a system with SAP S/4HANA 2023 (or higher)
 * Note 3565942 implemented
+* Note 3630552 implemented
   
 * Kernseife Classification JSON File
   
