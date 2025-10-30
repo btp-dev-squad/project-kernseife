@@ -147,13 +147,25 @@ const calculateScoreAndLevel = async (
       import_ID: developmentObject.latestFindingImportId,
       objectType: developmentObject.objectType,
       objectName: developmentObject.objectName,
-      devClass: developmentObject.devClass
+      devClass: developmentObject.devClass,
+      messageId: { 'not in': ['X', '2', '5'] }
     })
-    .groupBy('objectType', 'objectName', 'devClass');
-    LOG.info('Score Calculation Result', { result });
+    .groupBy('import_ID', 'objectType', 'objectName', 'devClass');
+  if (!result || result.length != 1 || result[0].score == null) {
+    return {
+      score: 0,
+      potentialScore: 0,
+      level: CleanCoreLevel.A,
+      potentialLevel: CleanCoreLevel.A
+    };
+  }
+
   return {
     score: result[0]?.score || 0,
-    potentialScore: result[0]?.potentialScore != null ? result[0]?.potentialScore : result[0]?.score || 0,
+    potentialScore:
+      result[0]?.potentialScore != null
+        ? result[0]?.potentialScore
+        : result[0]?.score || 0,
     level: result[0]?.level || CleanCoreLevel.A,
     potentialLevel:
       result[0]?.potentialLevel || result[0]?.level || CleanCoreLevel.A
@@ -236,11 +248,10 @@ export const importFinding = async (
       }
 
       if (findingRecord.messageId!.endsWith('_SUC')) {
-       
         // Find Successors
         const successorKey = getSuccessorKey(
-          finding.refObjectType,
-          finding.refObjectName
+          findingRecord.refObjectType!,
+          findingRecord.refObjectName!
         );
         findingRecord.potentialMessageId = successorMap.get(successorKey);
 
@@ -250,8 +261,9 @@ export const importFinding = async (
         // No Successor, so use the same as messageId
         findingRecord.potentialMessageId = findingRecord.messageId;
       }
-
-      //LOG.info('Importing Finding Record', { findingRecord });
+      if (findingRecord.objectName == '0COORDER_0103_HIER') {
+        LOG.info('Importing Finding Record', { findingRecord });
+      }
       return findingRecord;
     })
     .filter((finding) => {
@@ -323,6 +335,10 @@ export const importFinding = async (
         namespace: ''
       } as DevelopmentObject;
 
+      if (developmentObject.objectName == 'Z_VC_FUNC') {
+        LOG.info('Importing Development Object', { developmentObject });
+      }
+
       const { score, potentialScore, level, potentialLevel } =
         await calculateScoreAndLevel(developmentObject);
       developmentObject.potentialScore = potentialScore;
@@ -354,6 +370,7 @@ export const importFinding = async (
         LOG.error('Invalid Development Object', { developmentObject });
       }
       developmentObjectInsert.push(developmentObject);
+
       insertCount++;
     }
     if (developmentObjectInsert.length > 0) {
